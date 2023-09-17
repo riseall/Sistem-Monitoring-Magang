@@ -11,7 +11,7 @@ class StorePegawaiRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StorePegawaiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required',
+            'nip' => 'required',
         ];
     }
 }

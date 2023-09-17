@@ -22,4 +22,10 @@ class Pegawai extends Model
         'nip' => 'encrypted',
         'alamat' => 'encrypted',
     ];
+
+    protected $fillable = [
+        'nama',
+        'nip',
+        'alamat'
+    ];
 }

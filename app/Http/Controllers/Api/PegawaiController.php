@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePegawaiRequest;
 use App\Models\Pegawai;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::all();
         
+        // TODO Penerapan pagination
         return new JsonResponse(
             [
                 'message' => 'Data Pegawai',
@@ -29,9 +31,14 @@ class PegawaiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePegawaiRequest $request)
     {
-        //
+        $createdPegawai = Pegawai::query()->create($request->safe()->all());
+
+        return response()-> json([
+            'message' => 'Berhasil Menambahkan Pegawai',
+            'data' => $createdPegawai
+        ], Response::HTTP_CREATED);
     }
 
     /**
