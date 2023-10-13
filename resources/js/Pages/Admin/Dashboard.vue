@@ -1,127 +1,20 @@
 <script setup lang="ts">
 import Sidebar from '@/Components/Sidebar.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import axios from 'axios';
-import { computed, ref } from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-/* Total absen masuk */
-const absenMasuk = ref();
-axios.get('api/absenMasuk')
-    .then(result => {
-        absenMasuk.value = result.data.data
-    })
-const totalItems = computed(() => {
-    if (absenMasuk.value) {
-        return absenMasuk.value.length;
-    }
-    return 0;
-});
-
-/* Total absen keluar */
-const absenKeluar = ref();
-axios.get('api/absenKeluar')
-    .then(result => {
-        absenKeluar.value = result.data.data
-    })
-const totalKeluar = computed(() => {
-    if (absenKeluar.value) {
-        return absenKeluar.value.length;
-    }
-    return 0;
-});
-
-/* Total user */
-const user = ref();
-axios.get('api/user')
-    .then(result => {
-        user.value = result.data.data
-    })
-const totalUser = computed(() => {
-    if (user.value) {
-        return user.value.length;
-    }
-    return 0;
-});
-
-/* Total Mahasiswa */
-const mahasiswa = ref();
-axios.get('api/mahasiswa')
-    .then(result => {
-        mahasiswa.value = result.data.data
-    })
-const totalmhs = computed(() => {
-    if (mahasiswa.value) {
-        return mahasiswa.value.length;
-    }
-    return 0;
-});
-
-/* Total Dosen */
-const dosen = ref();
-axios.get('api/dosen')
-    .then(result => {
-        dosen.value = result.data.data
-    })
-const totalDsn = computed(() => {
-    if (dosen.value) {
-        return dosen.value.length;
-    }
-    return 0;
-});
-
-/* Total Perusahaan */
-const perusahaan = ref();
-axios.get('api/perusahaan')
-    .then(result => {
-        perusahaan.value = result.data.data
-    })
-const totalPrsh = computed(() => {
-    if (perusahaan.value) {
-        return perusahaan.value.length;
-    }
-    return 0;
-});
-
-/* Total Magang */
-const magang = ref();
-axios.get('api/magang')
-    .then(result => {
-        magang.value = result.data.data
-    })
-const totalMgng = computed(() => {
-    if (magang.value) {
-        return magang.value.length;
-    }
-    return 0;
-});
-
-/* Total Laporan */
-const laporan = ref();
-axios.get('api/laporan')
-    .then(result => {
-        laporan.value = result.data.data
-    })
-const totalLprn = computed(() => {
-    if (laporan.value) {
-        return laporan.value.length;
-    }
-    return 0;
-});
+import { Head } from '@inertiajs/vue3';
 </script>
 <template>
-    <Head title="Dashboard" />
 
+    <Head title="Dashboard" />
     <Sidebar>
         <div class="grid lg:grid-cols-4 gap-4 relative md:grid-cols-2">
-            <div id="card" class="card group">
-                <div class="flex items-center text-green-950 bg-green-500 justify-between p-4 pb-3">
-                    <div>
-                        <p class="font-bold">{{ totalItems }}</p>
-                        <p class="text-sm">Absen Masuk</p>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                        class="w-10 h-10 m-1 text-green-700 group-hover:scale-125 transition-all duration-500">
+            <div id="card"
+                class="flex flex-row items-center justify-between bg-white p-4 border shadow-md shadow-slate-200 rounded-lg">
+                <div>
+                    <p class="font-bold">0</p>
+                    <p class="text-sm">Absen Masuk</p>
+                </div>
+                <div class="bg-green-300 text-green-700 p-2 m-2 rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                         <path fill-rule="evenodd"
                             d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zm5.845 17.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V12a.75.75 0 00-1.5 0v4.19l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z"
                             clip-rule="evenodd" />
@@ -248,5 +141,13 @@ const totalLprn = computed(() => {
                 </Link>
             </div>
         </div>
+        <!-- <div id="card" class="bg-white m-4 p-4 border shadow-lg shadow-slate-200 rounded-lg">
+                <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing
+                    elit. Ipsam labore nam, harum repellat delectus voluptas
+                    ipsa quos ullam culpa nesciunt possimus minima sapiente
+                    in eaque atque nihil quae officia voluptatum.
+                </p>
+            </div> -->
     </Sidebar>
 </template>

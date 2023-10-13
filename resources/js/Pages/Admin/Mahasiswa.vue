@@ -2,59 +2,27 @@
 import Sidebar from '@/Components/Sidebar.vue';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
-import { Ref, computed, ref, watch } from 'vue';
+import { ref } from 'vue';
 import BlueButton from '@/Components/UI/BlueButton.vue';
 import RedButton from '@/Components/UI/RedButton.vue';
-import ModalDialog from '@/Components/ModalDialog.vue';
-import InputForm from '@/Components/Form/InputForm.vue';
-import BtnTutup from '@/Components/UI/BtnTutup.vue';
-import BtnEdit from '@/Components/UI/BtnEdit.vue';
-import BtnDelete from '@/Components/UI/BtnDelete.vue';
-import { onMounted } from 'vue';
-import { AxiosError } from 'axios';
-import Swal from 'sweetalert2'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import ConfirmDialog from '@/Components/UI/ConfirmDialog.vue';
 
-const isOpen = ref(false)
-const isEdit = ref(false)
+import {
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+} from '@headlessui/vue'
 
-const closeModal = () => (isOpen.value = false)
-const openModal = () => {
+const isOpen = ref(true)
+
+function closeModal() {
+    isOpen.value = false
+}
+function openModal() {
     isOpen.value = true
-    errors.value = '';
 }
-const editOpen = (id: string) => {
-    isEdit.value = true
-    const selectedMahasiswa = mahasiswa.value.find((item) => {
-        return item.id === id
-    })
-    formData.value.id = selectedMahasiswa?.id ?? '-'
-    formData.value.foto = selectedMahasiswa?.foto ?? ''
-    formData.value.nama = selectedMahasiswa?.nama ?? ''
-    formData.value.nim = selectedMahasiswa?.nim ?? ''
-    formData.value.kelas = selectedMahasiswa?.kelas ?? ''
-    formData.value.telepon = selectedMahasiswa?.telepon ?? ''
-    formData.value.email = selectedMahasiswa?.email ?? ''
-    formData.value.alamat = selectedMahasiswa?.alamat ?? ''
-
-}
-const editClose = () => {
-    isEdit.value = false
-    formData.value = {
-        id: '',
-        foto: '',
-        nama: '',
-        nim: '',
-        kelas: '',
-        telepon: '',
-        email: '',
-        alamat: ''
-    }
-}
-
-const errors = ref();
-const itemsPerPage = 5;
-const currentPage = ref(1);
 
 type Response = {
     message: string,
@@ -67,232 +35,41 @@ type Mahasiswa = {
     nama: string,
     nim: string,
     kelas: string,
-    telepon: string,
+    telepom: number,
     email: string,
     alamat: string
 }
 
-const mahasiswa = ref<Mahasiswa[]>([]);
-//get data mahasiswa
-const getMhs = async () => {
-    await axios.get<Response>('api/mahasiswa', { params: { keywords: keywords.value } })
-        .then(result => {
-            console.log(result)
-            mahasiswa.value = result.data.data
-        });
-}
-const totalItems = computed(() => mahasiswa.value.length);
-const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
+const mahasiswa = ref();
+axios.get<Response>('api/mahasiswa')
+    .then(result => {
+        console.log(result)
+        mahasiswa.value = result.data.data
+    })
 
-const displayedItems = computed(() => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return mahasiswa.value.slice(startIndex, endIndex);
-});
+const tambahData = ref(false);
 
-const visPageNum = computed(() => {
-    let pageNum = []
-    if (totalPages.value <= 7) {
-        for (let i = 1; i <= totalPages.value; i++) {
-            pageNum.push(i);
-        }
-    } else {
-        if (currentPage.value <= 4) {
-            pageNum = [1, 2, 3, 4, 5, '....', totalPages.value];
-        } else if (currentPage.value >= totalPages.value - 3) {
-            pageNum = [1, '....', totalPages.value - 4, totalPages.value - 3, totalPages.value - 2, totalPages.value - 1, totalPages.value]
-        } else {
-            pageNum = [1, '....', currentPage.value, currentPage.value + 1, '....', totalPages.value]
-        }
-    }
-    return pageNum;
-});
-
-const changePage = (page: number) => {
-    if (page >= 1 && page <= totalPages.value) {
-        currentPage.value = page
-    }
+function add() {
+    tambahData.value = !tambahData.value
 }
 
-//handle search item
-const keywords = ref(null);
-const results = ref<Mahasiswa[]>([]);
-
-watch(keywords, () => {
-    getMhs();
-})
-
-//Handle untuk manambahkan data
-const formData: Ref<Mahasiswa> = ref({
-    id: '',
-    foto: '',
-    nama: '',
-    nim: '',
-    kelas: '',
-    telepon: '',
-    email: '',
-    alamat: ''
-});
-
-const fileInput = ref<HTMLInputElement | null>(null);
-let selectedFile: File | null = null;
-
-const handleFileChange = () => {
-    if (fileInput.value) {
-        selectedFile = fileInput.value.files![0];
-    }
-}
-
-const postData = async (event: Event) => {
-    event.preventDefault();
-
-    const form = new FormData();
-    form.append('nama', formData.value.nama);
-    form.append('nim', formData.value.nim);
-    form.append('kelas', formData.value.kelas);
-    form.append('telepon', formData.value.telepon);
-    form.append('email', formData.value.email);
-    form.append('alamat', formData.value.alamat);
-    try {
-
-        if (selectedFile) {
-            form.append('foto', selectedFile);
-        }
-
-        const response = await axios.post('api/mahasiswa', form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-        // response sukses
-        console.log('Berhasil Menambahkan Data', response.data);
-        Swal.fire({
-            title: "Yeayy!",
-            text: "Berhasil Menambahkan Data.",
-            icon: "success"
-        });
-        isOpen.value = false;
-        formData.value = {
-            id: '',
-            foto: '',
-            nama: '',
-            nim: '',
-            kelas: '',
-            telepon: '',
-            email: '',
-            alamat: ''
-        }
-        getMhs()
-    } catch (error: unknown) {
-        // response error
-        if (error instanceof AxiosError) {
-            errors.value = error.response?.data.errors;
-        }
-        console.error('Post gagal:', error);
-    }
-}
-
-// Function to handle updating Mahasiswa data
-const updateData = async () => {
-    const form = new FormData();
-    form.append('_method', 'PUT');
-    form.append('nama', formData.value.nama);
-    form.append('nim', formData.value.nim);
-    form.append('kelas', formData.value.kelas);
-    form.append('telepon', formData.value.telepon);
-    form.append('email', formData.value.email);
-    form.append('alamat', formData.value.alamat);
-
-    try {
-        if (selectedFile) {
-            form.append('foto', selectedFile);
-        }
-
-        const response = await axios.post(`api/mahasiswa/${formData.value.id}`, form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-
-        // Handle the update response
-        console.log('Berhasil Memperbarui Data', response.data);
-        //sweetalert
-        Swal.fire({
-            title: "Yeayy!",
-            text: "Berhasil Memperbarui Data.",
-            icon: "success"
-        });
-        isEdit.value = false;
-        formData.value = {
-            id: '',
-            foto: '',
-            nama: '',
-            nim: '',
-            kelas: '',
-            telepon: '',
-            email: '',
-            alamat: ''
-        }
-        selectedFile = null;
-        getMhs();
-        // You may also need to update the `mahasiswa` list if you're maintaining a list of students
-    } catch (error) {
-        console.error('Update gagal:', error);
-    }
-};
-
-//handle untuk menghapus data
-const deleteUser = (id: string) => {
-    try {
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Anda tidak akan dapat mengembalikan ini!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const response = axios.delete(`api/mahasiswa/${id}`);
-                getMhs();
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
-                    icon: "success"
-                });
-            }
-        });
-    } catch (error) {
-        // Handle errors here
-        console.error('Error making DELETE request:', error);
-    }
-};
-
-onMounted(() => {
-    getMhs()
-});
-
+const isConfirmDialog = ref(false);
 </script>
 <template>
+
     <Head title="Mahasiswa" />
 
     <Sidebar>
-        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
-            <h3 class="text-lg font-semibold text-left">Data Mahasiswa</h3>
-            <div class="flex justify-between mb-4 mt-3 items-start-start">
-                <div>
-                    <input type="text" class="rounded-lg text-xs p-[0.3 rem]" v-model="keywords" placeholder="Search">
-                    <ul v-if="results.length > 0">
-                        <li v-for="result in results" :key="result.id" v-text="result.nama, result.nim, result.kelas"></li>
-                    </ul>
-                </div>
+        <div
+            class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+            <div class="flex justify-between mb-4 items-start-start">
+                <h3 class="text-xl font-bold text-left">Data Mahasiswa</h3>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>
             </div>
-            <div class="overflow-x-auto rounded-lg">
+            <div class="container overflow-x-auto rounded-lg">
                 <!-- Table Mahasiswa -->
                 <table class="w-full align-middle border border-collapse">
-                    <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">
+                    <thead class="text-left text-slate-800 bg-gray-100 sticky top-0 rounded-lg">
                         <tr class="table-row">
                             <th class="th-items">No</th>
                             <th class="th-items">Foto</th>
@@ -306,11 +83,10 @@ onMounted(() => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <tr class="odd:bg-gray-50" v-for="(Item, index) in displayedItems" :key="Item.id">
-                            <td class="td-items">{{ (currentPage - 1) * itemsPerPage + index + 1 }}.</td>
+                        <tr class="even:bg-gray-50" v-for="(Item, index) in mahasiswa" :key="Item.id">
+                            <td class="td-items">{{ index + 1 }}</td>
                             <td class="td-items">
-                                <img :src="Item.foto ?? `/foto_mahasiswa/pas_foto_kosong.png`"
-                                    class="w-14 h-14 rounded-xl object-contain">
+                                <img :src="Item.foto" alt="" class="w-14 h-14 rounded-lg">
                             </td>
                             <td class="td-items">{{ Item.nama }}</td>
                             <td class="td-items">{{ Item.nim }}</td>
@@ -320,224 +96,174 @@ onMounted(() => {
                             <td class="td-items">{{ Item.alamat }}</td>
                             <td class="p-3 text-white">
                                 <div class="flex items-center space-x-2">
-                                    <BtnEdit @click="editOpen(Item.id)" />
-                                    <BtnDelete @click="deleteUser(Item.id)" />
+                                    <button
+                                        class="flex items-center justify-center rounded-lg w-8 h-8 bg-green-500 hover:bg-green-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                        </svg>
+                                    </button>
+                                    <button @click="Item.delete"
+                                        class="flex items-center justify-center rounded-lg w-8 h-8 bg-rose-500 hover:bg-rose-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="py-2">
-                    <nav class="block">
-                        <p class="text-xs text-gray-700 font-semibold">Jumlah Data : {{ totalItems }}</p>
-                        <ul class="flex pl-0 rounded list-none flex-wrap justify-center">
-                            <li>
-                                <a href="#" @click="changePage(currentPage - 1)" :disabled="(currentPage === 1)"
-                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
-                                    <FontAwesomeIcon icon="fas fa-chevron-left -ml-px" />
-                                </a>
-                            </li>
-                            <li v-for="Items in visPageNum" :key="Items"
-                                :class="{ active: currentPage == Items || Items === '....' }">
-                                <a href="#" @click="changePage(Number(Items))"
-                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 text-sky-400 focus:text-white focus:bg-sky-300 hover:bg-sky-300 hover:text-white">
-                                    {{ Items }}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" @click="changePage(currentPage + 1)" :disabled="(currentPage === 1)"
-                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
-                                    <FontAwesomeIcon icon="fas fa-chevron-right -ml-px" />
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-
-
                 <!-- End Table Mahasiswa -->
             </div>
         </div>
 
         <!-- Dialog Tambah Data -->
-        <ModalDialog :is-open="isOpen" @close="closeModal">
-            <template v-slot:jdlDialog>Tambah Data Mahasiswa</template>
-            <template v-slot:btn>
-                <BtnTutup @click="closeModal" />
-            </template>
-            <div class="flex-auto px-4 lg:px-10 py-10 pb-0">
-                <form @submit.prevent="postData">
-                    <div class="flex flex-wrap mt-3">
-                        <InputForm>
-                            <template v-slot:title>Nama</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.nama" placeholder="Nama" class="input-form" />
-                                <div class="text-red-400 text-sm" v-if="errors?.nama">{{ errors.nama[0] }}</div>
-                            </template>
-                        </InputForm>
+        <TransitionRoot appear :show="isOpen" as="template">
+            <Dialog as="div" @close="closeModal" class="relative z-10">
+                <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0"
+                    enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+                    <div class="fixed inset-0 bg-black bg-opacity-25" />
+                </TransitionChild>
 
-                        <InputForm>
-                            <template v-slot:title>NIM</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.nim" placeholder="Nim" class="input-form" />
-                                <div class="text-red-400 text-sm" v-if="errors?.nim">{{ errors.nim[0] }}</div>
-                            </template>
-                        </InputForm>
+                <div class="fixed inset-0 overflow-y-auto">
+                    <div class="flex min-h-full items-center justify-center p-4 text-center">
+                        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                            enter-to="opacity-100 scale-100" leave="duration-200 ease-in"
+                            leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+                            <DialogPanel
+                                class="w-full lg:max-w-3xl md:max-w-lg sm:max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-6 text-left align-middle shadow-xl transition-all">
+                                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                                    Tambah Data Mahasiswa
+                                </DialogTitle>
+                                <div class="flex-auto px-4 lg:px-10 py-10">
+                                    <form>
+                                        <div class="flex flex-wrap mt-3">
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                                        Nama
+                                                    </label>
+                                                    <input type="text"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                                        NIM
+                                                    </label>
+                                                    <input type="text"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                                        Kelas
+                                                    </label>
+                                                    <input type="text"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                                        Telepon
+                                                    </label>
+                                                    <input type="text"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                                        Email
+                                                    </label>
+                                                    <input type="email"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <InputForm>
-                            <template v-slot:title>Kelas</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.kelas" placeholder="Kelas" class="input-form" />
-                                <div class="text-red-400 text-sm" v-if="errors?.kelas">{{ errors.kelas[0] }}</div>
-                            </template>
-                        </InputForm>
+                                        <hr class="mt-6 border-b-1 border-blueGray-300" />
 
-                        <InputForm>
-                            <template v-slot:title>Telepon</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.telepon" placeholder="Telepon" class="input-form" />
-                                <div class="text-red-400 text-sm" v-if="errors?.telepon">{{ errors.telepon[0] }}</div>
-                            </template>
-                        </InputForm>
+                                        <div class="flex flex-wrap mt-5">
+                                            <div class="w-full lg:w-12/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                                        htmlFor="grid-password">
+                                                        Foto
+                                                    </label>
+                                                    <input type="file"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <InputForm>
-                            <template v-slot:title>Email</template>
-                            <template v-slot:input>
-                                <input type="email" v-model="formData.email" placeholder="Email"
-                                    class="peer invalid:ring-pink-600 input-form" />
-                                <div class="text-red-400 text-sm" v-if="errors?.email">{{ errors.email[0] }}</div>
-                                <p class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
-                                    Masukkan alamat email yang valid.
-                                </p>
-                            </template>
-                        </InputForm>
+                                        <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+                                        <div class="flex flex-wrap mt-5">
+                                            <div class="w-full lg:w-12/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                                        Alamat
+                                                    </label>
+                                                    <textarea type="text"
+                                                        class="border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="rounded-t mb-0 px-6 py-6">
+                                            <div class="text-center flex justify-end">
+                                                <BlueButton class="mr-2">Simpan</BlueButton>
+                                                <RedButton @click="closeModal">Batal</RedButton>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="mt-4">
+
+                                </div>
+                            </DialogPanel>
+                        </TransitionChild>
                     </div>
-
-                    <hr class="mt-2 border-b-1 border-blueGray-300" />
-
-                    <div class="flex flex-wrap mt-5">
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block text-blueGray-600 text-xs font-bold mb-2">
-                                    Foto
-                                </label>
-                                <input type="file" ref="fileInput" @change="handleFileChange"
-                                    class="input-form file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-                    <div class="flex flex-wrap mt-5">
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label
-                                    class="block text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
-                                    Alamat
-                                </label>
-                                <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
-                                    class="input-form"></textarea>
-                                <div class="text-red-400 text-sm" v-if="errors?.alamat">{{ errors.alamat[0] }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-t mb-0 px-6 py-6">
-                        <div class="text-center flex justify-end">
-                            <BlueButton @click="postData" type="submit" class="mr-2">Simpan</BlueButton>
-                            <RedButton @click="closeModal">Batal</RedButton>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </ModalDialog>
+                </div>
+            </Dialog>
+        </TransitionRoot>
+        <div v-show="tambahData"
+            class="container flex flex-col max-w-3xl break-words mb-6 shadow-lg rounded-lg bg-white border-0">
+        </div>
         <!-- End dialog tambah data -->
 
-        <!-- Dialog Edit Data -->
-        <ModalDialog :is-open="isEdit">
-            <template v-slot:jdlDialog>Edit Data Mahasiswa</template>
-            <template v-slot:btn>
-                <BtnTutup @click="editClose" />
+        <ConfirmDialog v-if="isConfirmDialog">
+            <template v-slot:title>Konfirmasi</template>
+            <template v-slot:message>Apakah anda yakin akan menghapus data?</template>
+            <template v-slot:button>
+                <RedButton class="mx-1 mr-2">Ya</RedButton>
+                <BlueButton>Batal</BlueButton>
             </template>
-            <div class="flex-auto px-4 lg:px-10 py-10 pb-0">
-                <form @submit.prevent="updateData">
-                    <div class="flex flex-wrap mt-3">
-                        <InputForm>
-                            <template v-slot:title>Nama</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.nama" placeholder="Nama" class="input-form" />
-                            </template>
-                        </InputForm>
-
-                        <InputForm>
-                            <template v-slot:title>NIM</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.nim" placeholder="Nim" class="input-form" />
-                            </template>
-                        </InputForm>
-
-                        <InputForm>
-                            <template v-slot:title>Kelas</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.kelas" placeholder="Kelas" class="input-form" />
-                            </template>
-                        </InputForm>
-
-                        <InputForm>
-                            <template v-slot:title>Telepon</template>
-                            <template v-slot:input>
-                                <input type="text" v-model="formData.telepon" placeholder="Telepon" class="input-form" />
-                            </template>
-                        </InputForm>
-
-                        <InputForm>
-                            <template v-slot:title>Email</template>
-                            <template v-slot:input>
-                                <input type="email" v-model="formData.email" placeholder="Email"
-                                    class="peer invalid:ring-pink-600 input-form" />
-                                <p class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
-                                    Masukkan alamat email yang valid.
-                                </p>
-                            </template>
-                        </InputForm>
-                    </div>
-
-                    <hr class="mt-2 border-b-1 border-blueGray-300" />
-
-                    <div class="flex flex-wrap mt-5">
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                                    Foto
-                                </label>
-                                <input type="file" ref="fileInput" @change="handleFileChange"
-                                    class="input-form file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-                    <div class="flex flex-wrap mt-5">
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                                    Alamat
-                                </label>
-                                <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
-                                    class="input-form"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-t mb-0 px-6 py-6">
-                        <div class="text-center flex justify-end">
-                            <BlueButton @click="updateData" class="mr-2">Simpan</BlueButton>
-                            <RedButton @click="editClose">Batal</RedButton>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </ModalDialog>
-        <!-- End Dialog Edit Data -->
+        </ConfirmDialog>
     </Sidebar>
 </template>
+<style>
+.th-items {
+    @apply p-2 text-[13px] font-medium border
+}
+
+.td-items {
+    @apply p-3 text-gray-600 text-sm font-normal ml-2 truncate
+}
+</style>
