@@ -187,6 +187,7 @@ onMounted(() => {
 });
 </script>
 <template>
+
     <Head title="Absensi" />
     <Sidebar>
         <!-- Data Absen Masuk -->

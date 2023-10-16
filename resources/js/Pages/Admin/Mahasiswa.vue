@@ -2,7 +2,7 @@
 import Sidebar from '@/Components/Sidebar.vue';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
-import { ref } from 'vue';
+import { Ref, computed, ref } from 'vue';
 import BlueButton from '@/Components/UI/BlueButton.vue';
 import RedButton from '@/Components/UI/RedButton.vue';
 import ConfirmDialog from '@/Components/UI/ConfirmDialog.vue';
@@ -14,15 +14,16 @@ import {
     DialogPanel,
     DialogTitle,
 } from '@headlessui/vue'
+import BtnEdit from '@/Components/UI/BtnEdit.vue';
+import BtnDelete from '@/Components/UI/BtnDelete.vue';
 
-const isOpen = ref(true)
+const isOpen = ref(false)
+const isEdit = ref(false)
 
-function closeModal() {
-    isOpen.value = false
-}
-function openModal() {
-    isOpen.value = true
-}
+const closeModal = () => (isOpen.value = false)
+const openModal = () => (isOpen.value = true)
+const editClose = () => (isEdit.value = false)
+const editOpen = () => (isEdit.value = true)
 
 type Response = {
     message: string,
@@ -35,7 +36,7 @@ type Mahasiswa = {
     nama: string,
     nim: string,
     kelas: string,
-    telepom: number,
+    telepon: string,
     email: string,
     alamat: string
 }
@@ -47,13 +48,70 @@ axios.get<Response>('api/mahasiswa')
         mahasiswa.value = result.data.data
     })
 
-const tambahData = ref(false);
+const formData: Ref<Mahasiswa> = ref({
+    foto: '',
+    nama: '',
+    nim: '',
+    kelas: '',
+    telepon: '',
+    email: '',
+    alamat: ''
+});
 
-function add() {
-    tambahData.value = !tambahData.value
+const fileInput = ref<HTMLInputElement | null>(null);
+let selectedFile: File | null = null;
+
+const handleFileChange = () => {
+    if (fileInput.value) {
+        selectedFile = fileInput.value.files![0];
+    }
+}
+
+const postData = async (event: Event) => {
+    event.preventDefault();
+
+    const form = new FormData();
+    form.append('nama', formData.value.nama);
+    form.append('nim', formData.value.nim);
+    form.append('kelas', formData.value.kelas);
+    form.append('telepon', formData.value.telepon);
+    form.append('email', formData.value.email);
+    form.append('alamat', formData.value.alamat);
+    try {
+
+        if (selectedFile) {
+            form.append('foto', selectedFile);
+        }
+
+        const response = await axios.post('api/mahasiswa', form, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        // response sukses
+        console.log('Berhasil Menambahkan Data', response.data);
+        isOpen.value = false;
+    } catch (error) {
+        // response error
+        console.error('Post gagal:', error);
+    }
 }
 
 const isConfirmDialog = ref(false);
+isConfirmDialog.value = false;
+
+const deleteUser = async (id: string) => {
+    try {
+        const response = await axios.delete(`api/mahasiswa/${id}`);
+
+        // Handle the response here if needed
+        console.log('DELETE request was successful', response.data);
+    } catch (error) {
+        // Handle errors here
+        console.error('Error making DELETE request:', error);
+    }
+};
+
 </script>
 <template>
 
@@ -86,7 +144,8 @@ const isConfirmDialog = ref(false);
                         <tr class="even:bg-gray-50" v-for="(Item, index) in mahasiswa" :key="Item.id">
                             <td class="td-items">{{ index + 1 }}</td>
                             <td class="td-items">
-                                <img :src="Item.foto" alt="" class="w-14 h-14 rounded-lg">
+                                <img :src="Item.foto ?? `/foto_mahasiswa/pas_foto_kosong.png`" alt="Foto Mahasiswa"
+                                    class="w-14 h-14 rounded-lg">
                             </td>
                             <td class="td-items">{{ Item.nama }}</td>
                             <td class="td-items">{{ Item.nim }}</td>
@@ -96,22 +155,8 @@ const isConfirmDialog = ref(false);
                             <td class="td-items">{{ Item.alamat }}</td>
                             <td class="p-3 text-white">
                                 <div class="flex items-center space-x-2">
-                                    <button
-                                        class="flex items-center justify-center rounded-lg w-8 h-8 bg-green-500 hover:bg-green-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                        </svg>
-                                    </button>
-                                    <button @click="Item.delete"
-                                        class="flex items-center justify-center rounded-lg w-8 h-8 bg-rose-500 hover:bg-rose-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                        </svg>
-                                    </button>
+                                    <BtnEdit @click="editOpen" />
+                                    <BtnDelete />
                                 </div>
                             </td>
                         </tr>
@@ -139,7 +184,133 @@ const isConfirmDialog = ref(false);
                                 <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
                                     Tambah Data Mahasiswa
                                 </DialogTitle>
-                                <div class="flex-auto px-4 lg:px-10 py-10">
+                                <div class="flex-auto px-4 lg:px-10 py-10 pb-0">
+                                    <form @submit.prevent="postData">
+                                        <div class="flex flex-wrap mt-3">
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500 required:border-red-500">
+                                                        Nama
+                                                    </label>
+                                                    <input type="text" v-model="formData.nama" placeholder="Nama"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
+                                                        NIM
+                                                    </label>
+                                                    <input type="text" v-model="formData.nim" placeholder="NIM"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
+                                                        Kelas
+                                                    </label>
+                                                    <input type="text" v-model="formData.kelas" placeholder="Kelas"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
+                                                        Telepon
+                                                    </label>
+                                                    <input type="text" v-model="formData.telepon" placeholder="Telepon"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full lg:w-6/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
+                                                        Email
+                                                    </label>
+                                                    <input type="email" v-model="formData.email" placeholder="Email"
+                                                        class="peer border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                    <p
+                                                        class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
+                                                        Please provide a valid email address.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+                                        <div class="flex flex-wrap mt-5">
+                                            <div class="w-full lg:w-12/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                                        htmlFor="grid-password">
+                                                        Foto
+                                                    </label>
+                                                    <input type="file" ref="fileInput" @change="handleFileChange"
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+                                        <div class="flex flex-wrap mt-5">
+                                            <div class="w-full lg:w-12/12 px-4">
+                                                <div class="relative w-full mb-3">
+                                                    <label
+                                                        class="block uppercase text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
+                                                        Alamat
+                                                    </label>
+                                                    <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
+                                                        class="border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="rounded-t mb-0 px-6 py-6">
+                                            <div class="text-center flex justify-end">
+                                                <BlueButton @click="postData, closeModal" type="submit" class="mr-2">
+                                                    Simpan
+                                                </BlueButton>
+                                                <RedButton @click="closeModal">Batal</RedButton>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </DialogPanel>
+                        </TransitionChild>
+                    </div>
+                </div>
+            </Dialog>
+        </TransitionRoot>
+        <!-- End dialog tambah data -->
+
+        <!-- Dialog Edit Data -->
+        <TransitionRoot appear :show="isEdit" as="template">
+            <Dialog as="div" @close="editClose" class="relative z-10">
+                <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0"
+                    enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+                    <div class="fixed inset-0 bg-black bg-opacity-50" />
+                </TransitionChild>
+
+                <div class="fixed inset-0 overflow-y-auto">
+                    <div class="flex min-h-full items-center justify-center p-4 text-center">
+                        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                            enter-to="opacity-100 scale-100" leave="duration-200 ease-in"
+                            leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+                            <DialogPanel
+                                class="w-full lg:max-w-3xl md:max-w-lg sm:max-w-md transform overflow-hidden rounded-2xl bg-gray-100 p-6 text-left align-middle shadow-xl transition-all">
+                                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                                    Edit Data Mahasiswa
+                                </DialogTitle>
+                                <div class="flex-auto px-4 lg:px-10 py-10 pb-0">
                                     <form>
                                         <div class="flex flex-wrap mt-3">
                                             <div class="w-full lg:w-6/12 px-4">
@@ -228,14 +399,10 @@ const isConfirmDialog = ref(false);
                                         <div class="rounded-t mb-0 px-6 py-6">
                                             <div class="text-center flex justify-end">
                                                 <BlueButton class="mr-2">Simpan</BlueButton>
-                                                <RedButton @click="closeModal">Batal</RedButton>
+                                                <RedButton @click="editClose">Batal</RedButton>
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-
-                                <div class="mt-4">
-
                                 </div>
                             </DialogPanel>
                         </TransitionChild>
@@ -243,10 +410,7 @@ const isConfirmDialog = ref(false);
                 </div>
             </Dialog>
         </TransitionRoot>
-        <div v-show="tambahData"
-            class="container flex flex-col max-w-3xl break-words mb-6 shadow-lg rounded-lg bg-white border-0">
-        </div>
-        <!-- End dialog tambah data -->
+        <!-- End Dialog Edit Data -->
 
         <ConfirmDialog v-if="isConfirmDialog">
             <template v-slot:title>Konfirmasi</template>

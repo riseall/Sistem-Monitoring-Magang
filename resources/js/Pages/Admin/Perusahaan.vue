@@ -185,6 +185,7 @@ onMounted(() => {
 
 </script>
 <template>
+
     <head title="Perusahaan"></head>
 
     <Sidebar>
