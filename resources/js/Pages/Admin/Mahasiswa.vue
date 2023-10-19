@@ -89,6 +89,7 @@ const postData = async (event: Event) => {
         });
         // response sukses
         console.log('Berhasil Menambahkan Data', response.data);
+        alert(response.data.message);
         isOpen.value = false;
     } catch (error) {
         // response error
@@ -99,12 +100,13 @@ const postData = async (event: Event) => {
 const isConfirmDialog = ref(false);
 isConfirmDialog.value = false;
 
-const deleteUser = async (id: string) => {
+const deleteUser = async (id: number) => {
     try {
         const response = await axios.delete(`api/mahasiswa/${id}`);
 
         // Handle the response here if needed
-        console.log('DELETE request was successful', response.data);
+        console.log(response.data.message);
+        alert(response.data.message);
     } catch (error) {
         // Handle errors here
         console.error('Error making DELETE request:', error);
@@ -153,7 +155,7 @@ const deleteUser = async (id: string) => {
                             <td class="p-3 text-white">
                                 <div class="flex items-center space-x-2">
                                     <BtnEdit @click="editOpen" />
-                                    <BtnDelete />
+                                    <BtnDelete @click="deleteUser(Item.id)" />
                                 </div>
                             </td>
                         </tr>
