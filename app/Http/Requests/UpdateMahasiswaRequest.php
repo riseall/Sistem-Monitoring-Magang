@@ -22,7 +22,7 @@ class UpdateMahasiswaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'foto' => 'sometimes|string',
+            'foto' => 'sometimes|file',
             'nama' => 'sometimes|string|max:255',
             'nim' => 'sometimes|numeric',
             'kelas' => 'sometimes|string',
