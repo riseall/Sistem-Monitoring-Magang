@@ -19,11 +19,38 @@ import BtnDelete from '@/Components/UI/BtnDelete.vue';
 
 const isOpen = ref(false)
 const isEdit = ref(false)
+const selectedMahasiswa = ref<any | null>(null)
 
 const closeModal = () => (isOpen.value = false)
 const openModal = () => (isOpen.value = true)
-const editClose = () => (isEdit.value = false)
-const editOpen = () => (isEdit.value = true)
+const editOpen = (id: string) => {
+    isEdit.value = true
+    const selectedMahasiswa = mahasiswa.value.find((item) => {
+        return item.id === id
+    })
+    formData.value.id = selectedMahasiswa?.id ?? '-'
+    formData.value.foto = selectedMahasiswa?.foto ?? ''
+    formData.value.nama = selectedMahasiswa?.nama ?? ''
+    formData.value.nim = selectedMahasiswa?.nim ?? ''
+    formData.value.kelas = selectedMahasiswa?.kelas ?? ''
+    formData.value.telepon = selectedMahasiswa?.telepon ?? ''
+    formData.value.email = selectedMahasiswa?.email ?? ''
+    formData.value.alamat = selectedMahasiswa?.alamat ?? ''
+
+}
+const editClose = () => {
+    isEdit.value = false
+    formData.value = {
+        id: '',
+        foto: '',
+        nama: '',
+        nim: '',
+        kelas: '',
+        telepon: '',
+        email: '',
+        alamat: ''
+    }
+}
 
 type Response = {
     message: string,
@@ -41,7 +68,7 @@ type Mahasiswa = {
     alamat: string
 }
 
-const mahasiswa = ref();
+const mahasiswa = ref<Mahasiswa[]>([]);
 axios.get<Response>('api/mahasiswa')
     .then(result => {
         console.log(result)
@@ -49,6 +76,7 @@ axios.get<Response>('api/mahasiswa')
     })
 
 const formData: Ref<Mahasiswa> = ref({
+    id: '',
     foto: '',
     nama: '',
     nim: '',
@@ -98,10 +126,43 @@ const postData = async (event: Event) => {
     }
 }
 
+// Function to handle updating Mahasiswa data
+const updateData = async () => {
+    const form = new FormData();
+    form.append('_method', 'PUT');
+    form.append('nama', formData.value.nama);
+    form.append('nim', formData.value.nim);
+    form.append('kelas', formData.value.kelas);
+    form.append('telepon', formData.value.telepon);
+    form.append('email', formData.value.email);
+    form.append('alamat', formData.value.alamat);
+
+    try {
+        if (selectedFile) {
+            form.append('foto', selectedFile);
+        }
+
+        const response = await axios.post(`api/mahasiswa/${formData.value.id}`, form, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        // Handle the update response
+        console.log('Berhasil Memperbarui Data', response.data);
+        alert(response.data.message);
+        isEdit.value = false;
+        // You may also need to update the `mahasiswa` list if you're maintaining a list of students
+    } catch (error) {
+        console.error('Update gagal:', error);
+    }
+};
+
+
 const isConfirmDialog = ref(false);
 isConfirmDialog.value = false;
 
-const deleteUser = async (id: number) => {
+const deleteUser = async (id: string) => {
     try {
         const response = await axios.delete(`api/mahasiswa/${id}`);
 
@@ -129,7 +190,7 @@ const deleteUser = async (id: number) => {
             <div class="container overflow-x-auto rounded-lg">
                 <!-- Table Mahasiswa -->
                 <table class="w-full align-middle border border-collapse">
-                    <thead class="text-left text-slate-800 bg-gray-100 sticky top-0 rounded-lg">
+                    <thead class="text-left text-gray-100 bg-emerald-500 sticky top-0 rounded-lg">
                         <tr class="table-row">
                             <th class="th-items">No</th>
                             <th class="th-items">Foto</th>
@@ -143,11 +204,11 @@ const deleteUser = async (id: number) => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <tr class="even:bg-gray-50" v-for="(Item, index) in mahasiswa" :key="Item.id">
+                        <tr class="odd:bg-gray-50" v-for="(Item, index) in mahasiswa" :key="Item.id">
                             <td class="td-items">{{ index + 1 }}</td>
                             <td class="td-items">
                                 <img :src="Item.foto ?? `/foto_mahasiswa/pas_foto_kosong.png`" alt="Foto Mahasiswa"
-                                    class="w-14 h-14 rounded-lg">
+                                    class="w-14 h-14 rounded-lg object-contain">
                             </td>
                             <td class="td-items">{{ Item.nama }}</td>
                             <td class="td-items">{{ Item.nim }}</td>
@@ -157,7 +218,7 @@ const deleteUser = async (id: number) => {
                             <td class="td-items">{{ Item.alamat }}</td>
                             <td class="p-3 text-white">
                                 <div class="flex items-center space-x-2">
-                                    <BtnEdit @click="editOpen" />
+                                    <BtnEdit @click="editOpen(Item.id)" />
                                     <BtnDelete @click="deleteUser(Item.id)" />
                                 </div>
                             </td>
@@ -196,7 +257,7 @@ const deleteUser = async (id: number) => {
                                                         Nama
                                                     </label>
                                                     <input type="text" v-model="formData.nama" placeholder="Nama"
-                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow required:border-red-500 focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                                 </div>
                                             </div>
                                             <div class="w-full lg:w-6/12 px-4">
@@ -236,16 +297,16 @@ const deleteUser = async (id: number) => {
                                                         Email
                                                     </label>
                                                     <input type="email" v-model="formData.email" placeholder="Email"
-                                                        class="peer border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                        class="peer border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none invalid:ring-pink-600 focus:ring w-full ease-linear transition-all duration-150" />
                                                     <p
                                                         class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
-                                                        Please provide a valid email address.
+                                                        Masukkan alamat email yang valid.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <hr class="mt-6 border-b-1 border-blueGray-300" />
+                                        <hr class="mt-2 border-b-1 border-blueGray-300" />
 
                                         <div class="flex flex-wrap mt-5">
                                             <div class="w-full lg:w-12/12 px-4">
@@ -313,7 +374,7 @@ const deleteUser = async (id: number) => {
                                     Edit Data Mahasiswa
                                 </DialogTitle>
                                 <div class="flex-auto px-4 lg:px-10 py-10 pb-0">
-                                    <form>
+                                    <form @submit.prevent="updateData">
                                         <div class="flex flex-wrap mt-3">
                                             <div class="w-full lg:w-6/12 px-4">
                                                 <div class="relative w-full mb-3">
@@ -321,7 +382,7 @@ const deleteUser = async (id: number) => {
                                                         class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                                                         Nama
                                                     </label>
-                                                    <input type="text"
+                                                    <input type="text" id="nama" v-model="formData.nama"
                                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                                 </div>
                                             </div>
@@ -332,7 +393,8 @@ const deleteUser = async (id: number) => {
                                                         NIM
                                                     </label>
                                                     <input type="text"
-                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                        v-model="formData.nim" />
                                                 </div>
                                             </div>
                                             <div class="w-full lg:w-6/12 px-4">
@@ -341,7 +403,7 @@ const deleteUser = async (id: number) => {
                                                         class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                                                         Kelas
                                                     </label>
-                                                    <input type="text"
+                                                    <input type="text" v-model="formData.kelas"
                                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                                 </div>
                                             </div>
@@ -351,7 +413,7 @@ const deleteUser = async (id: number) => {
                                                         class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                                                         Telepon
                                                     </label>
-                                                    <input type="text"
+                                                    <input type="text" v-model="formData.telepon"
                                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                                 </div>
                                             </div>
@@ -361,7 +423,7 @@ const deleteUser = async (id: number) => {
                                                         class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                                                         Email
                                                     </label>
-                                                    <input type="email"
+                                                    <input type="email" v-model="formData.email"
                                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                                 </div>
                                             </div>
@@ -377,7 +439,7 @@ const deleteUser = async (id: number) => {
                                                         htmlFor="grid-password">
                                                         Foto
                                                     </label>
-                                                    <input type="file"
+                                                    <input type="file" ref="fileInput" @change="handleFileChange"
                                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                                 </div>
                                             </div>
@@ -392,7 +454,7 @@ const deleteUser = async (id: number) => {
                                                         class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                                                         Alamat
                                                     </label>
-                                                    <textarea type="text"
+                                                    <textarea type="text" v-model="formData.alamat"
                                                         class="border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
                                                     </textarea>
                                                 </div>
@@ -400,7 +462,7 @@ const deleteUser = async (id: number) => {
                                         </div>
                                         <div class="rounded-t mb-0 px-6 py-6">
                                             <div class="text-center flex justify-end">
-                                                <BlueButton class="mr-2">Simpan</BlueButton>
+                                                <BlueButton @click="updateData" class="mr-2">Simpan</BlueButton>
                                                 <RedButton @click="editClose">Batal</RedButton>
                                             </div>
                                         </div>
