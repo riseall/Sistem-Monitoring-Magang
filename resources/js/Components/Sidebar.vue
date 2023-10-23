@@ -14,16 +14,11 @@ function toggleDrop() {
 }
 </script>
 <template>
-    <aside class="relative flex min-h-screen">
+    <aside class="relative flex min-h-screen font-montserrat">
         <!-- Sidebar -->
         <div class="bg-gray-900 shadow-lg text-gray-100 w-64 space-y-6 px-2 py-4 md:relative md:-translate-x-0 transform transition duration-200 ease-in-out"
             :class="{ 'relative -translate-x-0': toggleSidebar }" v-show="showSide">
-            <Link href="" class="flex items-center space-x-2 px-4">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="w-8 h-8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
-            </svg>
+            <Link href="dashboard" class="flex items-center space-x-2 px-4">
             <span class="text-xl font-extrabold text-gray-100">InternshipMonitor</span>
             </Link>
             <nav>
@@ -75,20 +70,36 @@ function toggleDrop() {
                         </svg>
                     </button>
                     <!-- User -->
-                    <div class="w-44">
+                    <div class="">
                         <div class="flex items-center space-x-4" @click="toggleDrop">
                             <img class="w-10 h-10 rounded-full border-2 border-gray-50 bg-black" src="">
                             <div class="font-semibold dark:text-white text-left">
-                                <div>Rizal Nugroho</div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400">Admin</div>
+                                <span class="inline-flex flex-col rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                        {{ $page.props.auth.user.name }}
+
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">Admin</span>
+                                </span>
                             </div>
                         </div>
                         <div v-show="showDropDown"
-                            class="absolute right-[10px] z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1">
-                            <div class="py-1 text-left" role="none">
-                                <Link href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
-                                    id="menu-item-0">Profile</Link>
-                            </div>
+                            class="absolute right-[10px] z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 block text-left text-sm leading-5 text-gray-700 dark:text-gray-300">
+                            <Link :href="route('profile.edit')" class="drop-item" role="menuitem" tabindex="-1"
+                                id="menu-item-0">
+                            Profile
+                            </Link>
+                            <Link :href="route('logout')" method="post" as="button" class="drop-item" role="menuitem"
+                                tabindex="-1" id="menu-item-0">
+                            Log Out
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -102,6 +113,10 @@ function toggleDrop() {
 </template>
 <style>
 .nav-item {
-    @apply flex items-center space-x-2 py-3 px-4 hover:bg-gray-950 rounded-md hover:text-gray-400 active:bg-gray-800 focus:ring-1 focus:ring-gray-300 transition duration-200
+    @apply flex text-sm items-center justify-start space-x-2 py-3 px-7 hover:bg-gray-950 rounded-md hover:text-gray-400 active:bg-gray-800 focus:ring-1 focus:ring-gray-300 transition duration-200
+}
+
+.drop-item {
+    @apply w-full text-left text-gray-700 block px-3 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out
 }
 </style>
