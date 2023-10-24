@@ -19,11 +19,28 @@ import BtnDelete from '@/Components/UI/BtnDelete.vue';
 
 const isOpen = ref(false)
 const isEdit = ref(false)
+const selectedPerusahaan = ref<any | null>(null)
 
 const closeModal = () => (isOpen.value = false)
 const openModal = () => (isOpen.value = true)
-const editClose = () => (isEdit.value = false)
-const editOpen = () => (isEdit.value = true)
+const editOpen = (id: string) => {
+    isEdit.value = true
+    const selectedPerusahaan = perusahaan.value.find((item) => {
+        return item.id === id
+    })
+    formData.value.id = selectedPerusahaan?.id ?? '-'
+    formData.value.nama = selectedPerusahaan?.nama ?? ''
+    formData.value.alamat = selectedPerusahaan?.alamat ?? ''
+}
+
+const editClose = () => {
+    isEdit.value = false
+    formData.value = {
+        id: '',
+        nama: '',
+        alamat: ''
+    }
+}
 
 type Response = {
     message: string,
@@ -31,11 +48,12 @@ type Response = {
 }
 
 type Perusahaan = {
+    id: string,
     nama: string,
     alamat: string
 }
 
-const perusahaan = ref();
+const perusahaan = ref<Perusahaan[]>([]);
 axios.get<Response>('api/perusahaan')
     .then(result => {
         console.log(result)
@@ -43,6 +61,7 @@ axios.get<Response>('api/perusahaan')
     })
 
 const formData: Ref<Perusahaan> = ref({
+    id: '',
     nama: '',
     alamat: ''
 });
@@ -70,10 +89,32 @@ const postData = async (event: Event) => {
     }
 }
 
+const updateData = async () => {
+    const form = new FormData();
+    form.append('nama', formData.value.nama);
+    form.append('alamat', formData.value.alamat);
+
+    try{
+        const response = await axios.put(`api/perusahaan/${formData.value.id}`, form, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+    });
+
+    // Handle the update response
+    console.log('Berhasil Memperbarui Data', response.data);
+        alert(response.data.message);
+        isEdit.value = false;
+        // You may also need to update the `` list if you're maintaining a list of students
+    } catch (error) {
+        console.error('Update gagal:', error);
+    }
+};
+
 const isConfirmDialog = ref(false);
 isConfirmDialog.value = false;
 
-const deleteUser = async (id: number) => {
+const deleteUser = async (id: string) => {
     try {
         const response = await axios.delete(`api/perusahaan/${id}`);
 
@@ -101,6 +142,7 @@ const deleteUser = async (id: number) => {
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-slate-800 bg-gray-100 sticky top-0 rounded-lg">
                         <tr class="table-row">
+                            <th class="th-items">No</th>
                             <th class="th-items">Nama Perusahaan</th>
                             <th class="th-items">Alamat Perusahaan</th>
                         </tr>
@@ -112,7 +154,7 @@ const deleteUser = async (id: number) => {
                             <td class="td-items">{{ Item.alamat }}</td>
                             <td class="p-3 text-white">
                                 <div class="flex items-center space-x-2">
-                                    <BtnEdit @click="editOpen" />
+                                    <BtnEdit @click="editOpen(Item.id)" />
                                     <BtnDelete @click="deleteUser(Item.id)" />
                                 </div>
                             </td>
@@ -188,7 +230,7 @@ const deleteUser = async (id: number) => {
         <!-- End dialog tambah data -->
 
                 <!-- Dialog Edit Data -->
-                <TransitionRoot appear :show="isEdit" as="template">
+        <TransitionRoot appear :show="isEdit" as="template">
             <Dialog as="div" @close="editClose" class="relative z-10">
                 <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
                     leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
@@ -213,7 +255,7 @@ const deleteUser = async (id: number) => {
                                                     <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                                                         Nama Perusahaan
                                                     </label>
-                                                    <input type="text"
+                                                    <input type="text" id="nama" v-model="formData.nama"
                                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                                 </div>
                                             </div>
@@ -227,7 +269,7 @@ const deleteUser = async (id: number) => {
                                                     <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                                                         Alamat Perusahaan
                                                     </label>
-                                                    <textarea type="text"
+                                                    <textarea type="text" v-model="formData.alamat"
                                                         class="border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
                                                     </textarea>
                                                 </div>
@@ -235,7 +277,7 @@ const deleteUser = async (id: number) => {
                                         </div>
                                         <div class="rounded-t mb-0 px-6 py-6">
                                             <div class="text-center flex justify-end">
-                                                <BlueButton class="mr-2">Simpan</BlueButton>
+                                                <BlueButton @click="updateData" class="mr-2">Simpan</BlueButton>
                                                 <RedButton @click="editClose">Batal</RedButton>
                                             </div>
                                         </div>
