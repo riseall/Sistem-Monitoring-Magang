@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +27,13 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('auth/google', [ProviderController::class, 'redirect'])->name('googleAuth');
+Route::get('auth/google/callback', [ProviderController::class, 'callbackGoogle']);
+
+Route::get('/homes', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -43,6 +49,8 @@ Route::get('home', function () {
     return Inertia::render('App');
 });
 
+// Route untuk Tampilan Admin
+
 Route::get('dashboard', function () {
     return Inertia::render('Admin/Dashboard');
 });
@@ -57,6 +65,21 @@ Route::get('perusahaan', function () {
 
 Route::get('absensi', function () {
     return Inertia::render('Admin/Absensi');
+});
+
+
+// Route untuk Tampilan User
+
+Route::get('user.dashboard', function () {
+    return Inertia::render('User/Dashboard');
+});
+
+Route::get('user.history', function () {
+    return Inertia::render('User/History');
+});
+
+Route::get('user.dashboard', function () {
+    return Inertia::render('User/Dashboard');
 });
 
 require __DIR__ . '/auth.php';

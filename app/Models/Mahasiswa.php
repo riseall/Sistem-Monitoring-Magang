@@ -18,14 +18,13 @@ class Mahasiswa extends Model
         'deleted_at',
     ];
 
-    // protected $casts = [
-    //     'nip' => 'encrypted',
-    //     'alamat' => 'encrypted',
-    // ];
-
-    // protected $fillable = [
-    //     'nama',
-    //     'nip',
-    //     'alamat'
-    // ];
+    protected $fillable = [
+        'foto',
+        'nama',
+        'nim',
+        'kelas',
+        'telepon',
+        'email',
+        'alamat'
+    ];
 }

@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateMahasiswaRequest;
 use App\Models\Mahasiswa;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Storage;
 
 class MahasiswaController extends Controller
 {
@@ -44,7 +43,7 @@ class MahasiswaController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
-            $foto->move(public_path('foto_mahasiswa'), $fileNama);
+            $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
         }
 
         //Simpan referensi foto pada database
@@ -79,11 +78,28 @@ class MahasiswaController extends Controller
     public function update(UpdateMahasiswaRequest $request, string $id)
     {
         $mahasiswa = Mahasiswa::query()->find($id);
+
+        // Inisialisasi variabel $fileNama
+        $fileNama = null;
+
+        //Unggah foto dan simpan referensi
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fileNama = $foto->getClientOriginalName();
+            $path = $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
+        } else {
+            $path = $mahasiswa->foto;
+        }
+
+        //Simpan referensi foto pada database
+        $mahasiswa->update(['foto' => 'foto_mahasiswa/' . $fileNama]);
+
         if (empty($mahasiswa)) {
             throw new MyModelNotFoundException('mahasiswa');
         }
-
-        $mahasiswa->update($request->safe()->all());
+        $input = $request->safe()->all();
+        $input['foto'] = $path;
+        $mahasiswa->update($input);
         return response()->json([
             'message' => 'Data Mahasiswa berhasil diupdate',
             'data' => $mahasiswa
