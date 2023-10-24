@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\PegawaiController;
 use App\Http\Controllers\Api\MahasiswaController;
+use App\Http\Controllers\Api\PerusahaanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('pegawai', PegawaiController::class);
 
 Route::apiResource('mahasiswa', MahasiswaController::class);
+
+Route::apiResource('perusahaan', PerusahaanController::class);
