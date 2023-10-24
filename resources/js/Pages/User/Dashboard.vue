@@ -265,7 +265,7 @@ onMounted(() => {
         </main>
 
         <!-- Dialog Untuk Kamera Absen Masuk -->
-        <ModalDialog :is-open="isOpen" @close="closeMasuk">
+        <ModalDialog :is-open="isOpen">
             <template v-slot:btn>
                 <BtnTutup @click="closeMasuk" />
             </template>
