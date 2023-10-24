@@ -16,6 +16,7 @@ class PerusahaanController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         $perusahaan = Perusahaan::all();
@@ -28,13 +29,17 @@ class PerusahaanController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
-    /**
-     * Display the specified resource.
-     */
+    public function store(StorePerusahaanRequest $request)
+    {
+        $validateData = $request->validated();
+        $createdPerusahaan = Perusahaan::query()->create($validateData);
+    
+        return response()->json([
+            'message' => 'Berhasil Menambahkan Perusahaan',
+            'data' => $createdPerusahaan
+        ], Response::HTTP_CREATED);
+    }
+    
     public function show(string $id)
     {
 

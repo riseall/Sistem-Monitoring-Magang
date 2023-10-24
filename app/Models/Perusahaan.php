@@ -17,4 +17,9 @@ class Perusahaan extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    protected $fillable = [
+        'nama',
+        'alamat'
+    ];
 }
