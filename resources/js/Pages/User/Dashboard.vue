@@ -203,6 +203,7 @@ onMounted(() => {
 
 </script>
 <template>
+
     <Head title="Dashboard" />
     <NavbarBottom>
         <div class="bg-gray-800 text-white p-6 overflow-auto">
@@ -234,7 +235,8 @@ onMounted(() => {
             <div class="grid gap-5 relative lg:grid-cols-2 md:grid-cols-1">
                 <div class="bg-white rounded-md shadow-lg flex p-4 py-5 border border-gray-300">
                     <div class="p-2 rounded-md mr-5 bg-green-100">
-                        <FontAwesomeIcon icon="fa-solid fa-arrow-right-to-bracket" class="mr-1 text-lg text-green-700" />
+                        <FontAwesomeIcon icon="fa-solid fa-arrow-right-to-bracket"
+                            class="mr-1 text-lg text-green-700" />
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Masuk</h1>
@@ -243,7 +245,8 @@ onMounted(() => {
                 </div>
                 <div class="bg-white rounded-md shadow-lg flex p-4 py-5 border border-gray-300">
                     <div class="p-2 rounded-md mr-5 bg-rose-100">
-                        <FontAwesomeIcon icon="fa-solid fa-arrow-right-from-bracket" class="ml-1 text-lg text-red-700" />
+                        <FontAwesomeIcon icon="fa-solid fa-arrow-right-from-bracket"
+                            class="ml-1 text-lg text-red-700" />
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Keluar</h1>

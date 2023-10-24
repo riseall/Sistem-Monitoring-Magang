@@ -36,6 +36,7 @@ onMounted(() => {
 
 </script>
 <template>
+
     <Head title="Lokasi" />
 
     <div class="h-screen font-montserrat bg-zinc-200">

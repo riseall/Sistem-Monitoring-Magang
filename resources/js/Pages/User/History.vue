@@ -50,6 +50,7 @@ onMounted(async () => {
 });
 </script>
 <template>
+
     <Head title="History" />
 
     <NavbarBottom>
