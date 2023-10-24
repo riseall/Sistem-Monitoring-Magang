@@ -18,7 +18,7 @@ class ProviderController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->user();
-
+            // dd($googleUser);
             $user = User::where('google_id', $googleUser->getId())->first();
 
             if (!$user) {
