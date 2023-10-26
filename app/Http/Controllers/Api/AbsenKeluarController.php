@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Exceptions\MyModelNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAbsenKeluarRequest;
@@ -23,9 +24,11 @@ class AbsenKeluarController extends Controller
             ->orWhere('tanggal', 'like', '%' . $search . '%')
             ->orWhere('waktu', 'like', '%' . $search . '%')
             ->orWhere('lokasi', 'like', '%' . $search . '%')
-            ->with(['mahasiswa' => function ($query) use ($search) {
-                $query->where('nama', 'like', '%' . $search . '%');
-            }])
+            ->with([
+                'mahasiswa' => function ($query) use ($search) {
+                    $query->where('nama', 'like', '%' . $search . '%');
+                }
+            ])
             ->get();
 
         return new JsonResponse(
@@ -51,16 +54,16 @@ class AbsenKeluarController extends Controller
     public function store(StoreAbsenKeluarRequest $request)
     {
         $validate = $request->validated();
-        $validate['mahasiswa_id'] = $request->get('mahasiswa_id');
+
         $createdAbsen = AbsenKeluar::query()->create($validate);
 
-        if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
+        if ($request->hasFile('foto_out')) {
+            $foto = $request->file('foto_out');
             $filename = time() . '.' . $foto->getClientOriginalName();
             $foto->move(public_path('foto_absen'), $filename);
         }
 
-        $createdAbsen->update(['foto' => 'foto_absen/' . $filename]);
+        $createdAbsen->update(['foto_out' => 'foto_absen/' . $filename]);
 
         return response()->json([
             'message' => 'Berhasil menambahkan Data',

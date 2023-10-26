@@ -24,9 +24,11 @@ class AbsenMasukController extends Controller
             ->orWhere('tanggal', 'like', '%' . $search . '%')
             ->orWhere('waktu', 'like', '%' . $search . '%')
             ->orWhere('lokasi', 'like', '%' . $search . '%')
-            ->with(['mahasiswa' => function ($query) use ($search) {
-                $query->where('nama', 'like', '%' . $search . '%');
-            }])
+            ->with([
+                'mahasiswa' => function ($query) use ($search) {
+                    $query->where('nama', 'like', '%' . $search . '%');
+                }
+            ])
             ->get();
 
         return new JsonResponse(
