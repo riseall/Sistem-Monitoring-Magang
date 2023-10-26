@@ -6,6 +6,10 @@ import NavbarBottom from '@/Components/User/NavbarBottom.vue';
 import Lokasi from '@/Components/User/Lokasi.vue';
 import ModalDialog from '@/Components/ModalDialog.vue';
 import BtnTutup from '@/Components/UI/BtnTutup.vue';
+import AmberBtnVue from '@/Components/User/AmberBtn.vue';
+import InputForm from '@/Components/Form/InputForm.vue';
+
+const video = ref<HTMLVideoElement | null>(null);
 
 const currentDay = ref('');
 const currentDate = ref('');
@@ -20,14 +24,48 @@ const updateTime = () => {
     setTimeout(updateTime, 1000);
 };
 
+const isOpen = ref(false);
+const isClose = ref(false);
+
+const openMasuk = () => {
+    isOpen.value = true
+    startCapture();
+};
+const closeMasuk = () => {
+    isOpen.value = false
+    stopCapture();
+};
+
+const openKeluar = () => {
+    isClose.value = true
+    startCapture();
+};
+const closeKeluar = () => {
+    isClose.value = false
+    stopCapture();
+};
+
+const startCapture = async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        video.value!.srcObject = stream;
+        video.value!.play();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const stopCapture = () => {
+    if (video.value && video.value.srcObject) {
+        const tracks = (video.value.srcObject as MediaStream).getTracks();
+        tracks.forEach((track) => track.stop());
+    }
+};
+
 onMounted(() => {
     updateTime();
 });
 
-const isOpen = ref(false);
-
-const openMasuk = () => { isOpen.value = true };
-const closeMasuk = () => { isOpen.value = false };
 </script>
 <template>
     <div class="h-screen font-montserrat bg-zinc-200">
@@ -86,23 +124,49 @@ const closeMasuk = () => { isOpen.value = false };
                 </div>
             </div>
             <div class="flex justify-between mt-5 gap-5 font-semibold">
-                <button @click="openMasuk" class="bg-amber-400 w-full rounded-full p-3">
+                <AmberBtnVue @click="openMasuk">
                     Absen Masuk
-                </button>
-                <button class="bg-amber-400 w-full rounded-full p-3">
-                    Absen keluar
-                </button>
+                </AmberBtnVue>
+                <AmberBtnVue @click="openKeluar">
+                    Absen Keluar
+                </AmberBtnVue>
             </div>
         </main>
 
         <!-- Dialog Untuk Kamera Absen Masuk -->
-        <ModalDialog :is-open="isOpen" @close="closeMasuk">
+        <ModalDialog :is-open="isOpen">
             <template v-slot:btn>
                 <BtnTutup @click="closeMasuk" />
             </template>
-            <div>
-                Halo
-            </div>
+            <video ref="video" class="mt-3 rounded-lg"></video>
+            <AmberBtnVue class="mt-3 space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                </svg>
+                <span>Ambil</span>
+            </AmberBtnVue>
+        </ModalDialog>
+
+        <!-- Dialog Untuk Kamera Absen Keluar -->
+        <ModalDialog :is-open="isClose">
+            <template v-slot:btn>
+                <BtnTutup @click="closeKeluar" />
+            </template>
+            <video ref="video" class="mt-3 rounded-lg"></video>
+            <AmberBtnVue class="mt-3 space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                </svg>
+                <span>Ambil</span>
+            </AmberBtnVue>
         </ModalDialog>
 
         <NavbarBottom />
