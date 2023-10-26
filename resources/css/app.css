@@ -4,3 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.th-items {
+    @apply p-2 text-[13px] font-medium border
+}
+
+.td-items {
+    @apply p-3 text-gray-600 text-sm font-normal ml-2 truncate
+}
+
+.input-form {
+    @apply border-0 px-3 py-3 placeholder-gray-300 text-gray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150
+}
