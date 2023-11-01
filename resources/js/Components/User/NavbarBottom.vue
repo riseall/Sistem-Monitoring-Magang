@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 </script>
 <template>
     <footer class="flex items-center justify-between fixed bottom-0 left-0 right-0 bg-white text-sm p-2 px-8">
-        <Link href="user.dashboard" class="nav-item">
+        <Link href="user.dashboard" class="nav-item active:bg-amber-300">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -11,7 +11,7 @@ import { Link } from '@inertiajs/vue3';
         </svg>
         <span>Home</span>
         </Link>
-        <Link href="user.history" class="nav-item">
+        <Link href="user.history" class="nav-item active:bg-amber-300">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -19,7 +19,7 @@ import { Link } from '@inertiajs/vue3';
         </svg>
         <span>History</span>
         </Link>
-        <Link href="user.profile" class="nav-item">
+        <Link href="user.profile" class="nav-item active:bg-amber-300">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -32,6 +32,6 @@ import { Link } from '@inertiajs/vue3';
 
 <style>
 .nav-item {
-    @apply flex flex-col items-center font-montserrat p-2 hover:bg-amber-300 rounded-md hover:text-gray-900 active:bg-amber-400 focus:ring-1 focus:ring-amber-600 transition duration-200
+    @apply flex flex-col items-center font-montserrat p-2 rounded-lg transition duration-200
 }
 </style>

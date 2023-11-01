@@ -7,10 +7,8 @@ import Lokasi from '@/Components/User/Lokasi.vue';
 import ModalDialog from '@/Components/ModalDialog.vue';
 import BtnTutup from '@/Components/UI/BtnTutup.vue';
 import AmberBtnVue from '@/Components/User/AmberBtn.vue';
-import InputForm from '@/Components/Form/InputForm.vue';
 
-const video = ref<HTMLVideoElement | null>(null);
-
+//Logic DateTime
 const currentDay = ref('');
 const currentDate = ref('');
 const currentTime = ref('');
@@ -24,26 +22,17 @@ const updateTime = () => {
     setTimeout(updateTime, 1000);
 };
 
+//Open and Close Modal
 const isOpen = ref(false);
 const isClose = ref(false);
 
-const openMasuk = () => {
-    isOpen.value = true
-    startCapture();
-};
-const closeMasuk = () => {
-    isOpen.value = false
-    stopCapture();
-};
+const openMasuk = () => { isOpen.value = true; startCapture(); };
+const closeMasuk = () => { isOpen.value = false; stopCapture(); };
+const openKeluar = () => { isClose.value = true; startCapture(); };
+const closeKeluar = () => { isClose.value = false; stopCapture(); };
 
-const openKeluar = () => {
-    isClose.value = true
-    startCapture();
-};
-const closeKeluar = () => {
-    isClose.value = false
-    stopCapture();
-};
+//WebCam
+const video = ref<HTMLVideoElement | null>(null);
 
 const startCapture = async () => {
     try {
@@ -138,7 +127,7 @@ onMounted(() => {
             <template v-slot:btn>
                 <BtnTutup @click="closeMasuk" />
             </template>
-            <video ref="video" class="mt-3 rounded-lg"></video>
+            <video ref="video" class="mt-3 rounded-lg w-full"></video>
             <AmberBtnVue class="mt-3 space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
