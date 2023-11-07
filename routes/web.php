@@ -53,7 +53,7 @@ Route::get('home', function () {
 
 Route::get('dashboard', function () {
     return Inertia::render('Admin/Dashboard');
-});
+})->middleware('checkAdmin');
 
 Route::get('mahasiswa', function () {
     return Inertia::render('Admin/Mahasiswa');
@@ -72,7 +72,7 @@ Route::get('absensi', function () {
 
 Route::get('user.dashboard', function () {
     return Inertia::render('User/Dashboard');
-});
+})->name('user.dashboard');
 
 Route::get('user.history', function () {
     return Inertia::render('User/History');
