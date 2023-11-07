@@ -57,7 +57,7 @@ function toggleDrop() {
             </nav>
         </div>
         <!-- Main content -->
-        <div class="flex flex-col w-full h-screen overflow-auto bg-gray-100 ">
+        <div class="flex flex-col w-full h-screen overflow-auto bg-gray-200 ">
             <!-- Header -->
             <div class="bg-white border shadow-lg px-2 py-4 sticky top-0 z-10">
                 <div class="bg-white flex items-center justify-between px-5 z-10">
@@ -105,18 +105,9 @@ function toggleDrop() {
                 </div>
             </div>
             <!-- content -->
-            <div class="p-8 min-h-[calc(100vh-(5rem-6px))] bg-gray-100 max-w-full">
+            <div class="p-8 min-h-[calc(100vh-(5rem-6px))] max-w-full">
                 <slot />
             </div>
         </div>
     </aside>
 </template>
-<style>
-.nav-item {
-    @apply flex text-sm items-center justify-start space-x-2 py-3 px-7 hover:bg-gray-950 rounded-md hover:text-gray-400 active:bg-gray-800 focus:ring-1 focus:ring-gray-300 transition duration-200
-}
-
-.drop-item {
-    @apply w-full text-left text-gray-700 block px-3 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out
-}
-</style>

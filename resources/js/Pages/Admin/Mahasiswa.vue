@@ -176,7 +176,7 @@ const deleteUser = async (id: string) => {
     <Sidebar>
         <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex justify-between mb-4 items-start-start">
-                <h3 class="text-xl font-bold text-left">Data Mahasiswa</h3>
+                <h3 class="text-lg font-semibold text-left">Data Mahasiswa</h3>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>
             </div>
             <div class="container overflow-x-auto rounded-lg">
