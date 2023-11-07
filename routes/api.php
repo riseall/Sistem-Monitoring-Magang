@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AbsenKeluarController;
+use App\Http\Controllers\Api\AbsenMasukController;
 use App\Http\Controllers\Api\PegawaiController;
 use App\Http\Controllers\Api\MahasiswaController;
 use Illuminate\Http\Request;
@@ -23,3 +25,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('pegawai', PegawaiController::class);
 
 Route::apiResource('mahasiswa', MahasiswaController::class);
+
+Route::apiResource('absenMasuk', AbsenMasukController::class);
+Route::apiResource('absenKeluar', AbsenKeluarController::class);

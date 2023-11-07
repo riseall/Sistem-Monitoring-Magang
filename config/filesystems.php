@@ -30,6 +30,11 @@ return [
 
     'disks' => [
 
+        'foto_absen' => [
+            'driver' => 'local',
+            'root' => public_path('foto_absen'),
+        ],
+
         'foto_mahasiswa' => [
             'driver' => 'local',
             'root' => public_path('foto_mahasiswa'),
