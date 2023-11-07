@@ -12,9 +12,7 @@ defineProps<{
 </script>
 
 <template>
-
-    <Head title="Profile" />
-    <div class="min-h-screen font-montserrat bg-zinc-200">
+    <NavbarBottom>
 
         <Head title="Profile" />
         <div class="py-8 p-4">
@@ -33,5 +31,5 @@ defineProps<{
                 </div>
             </div>
         </div>
-        </NavbarBottom>
+    </NavbarBottom>
 </template>

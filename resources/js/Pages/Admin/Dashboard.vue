@@ -1,20 +1,62 @@
 <script setup lang="ts">
 import Sidebar from '@/Components/Sidebar.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
+import axios from 'axios';
+import { computed, ref } from 'vue';
+
+/* Total absen masuk */
+const absenMasuk = ref();
+axios.get('api/absenMasuk')
+    .then(result => {
+        absenMasuk.value = result.data.data
+    })
+const totalItems = computed(() => {
+    if (absenMasuk.value) {
+        return absenMasuk.value.length;
+    }
+    return 0;
+});
+
+/* Total absen keluar */
+const absenKeluar = ref();
+axios.get('api/absenKeluar')
+    .then(result => {
+        absenKeluar.value = result.data.data
+    })
+const totalKeluar = computed(() => {
+    if (absenKeluar.value) {
+        return absenKeluar.value.length;
+    }
+    return 0;
+});
+
+/* Total Mahasiswa */
+const mahasiswa = ref();
+axios.get('api/mahasiswa')
+    .then(result => {
+        mahasiswa.value = result.data.data
+    })
+const totalmhs = computed(() => {
+    if (mahasiswa.value) {
+        return mahasiswa.value.length;
+    }
+    return 0;
+});
 </script>
 <template>
 
     <Head title="Dashboard" />
+
     <Sidebar>
         <div class="grid lg:grid-cols-4 gap-4 relative md:grid-cols-2">
-            <div id="card"
-                class="flex flex-row items-center justify-between bg-white p-4 border shadow-md shadow-slate-200 rounded-lg">
-                <div>
-                    <p class="font-bold">0</p>
-                    <p class="text-sm">Absen Masuk</p>
-                </div>
-                <div class="bg-green-300 text-green-700 p-2 m-2 rounded-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <div id="card" class="card group">
+                <div class="flex items-center text-green-950 bg-green-500 justify-between p-4 pb-3">
+                    <div>
+                        <p class="font-bold">{{ totalItems }}</p>
+                        <p class="text-sm">Absen Masuk</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                        class="w-10 h-10 m-1 text-green-700 group-hover:scale-125 transition-all duration-500">
                         <path fill-rule="evenodd"
                             d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zm5.845 17.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V12a.75.75 0 00-1.5 0v4.19l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z"
                             clip-rule="evenodd" />
@@ -48,20 +90,6 @@ import { Head } from '@inertiajs/vue3';
                 </Link>
             </div>
             <div id="card" class="card group">
-                <div class="flex items-center text-fuchsia-950 bg-fuchsia-500 justify-between p-4 pb-3">
-                    <div>
-                        <p class="font-bold">{{ totalUser }}</p>
-                        <p class="text-sm">User</p>
-                    </div>
-                    <FontAwesomeIcon icon="fa-solid fa-users"
-                        class="w-10 h-10 m-1 text-fuchsia-700 group-hover:scale-125 transition-all duration-500" />
-                </div>
-                <Link href="user"
-                    class="flex items-center justify-center py-1 text-fuchsia-300 bg-fuchsia-600 group-hover:text-fuchsia-400 group-hover:bg-fuchsia-700">
-                <span class="text-sm">More Info</span>
-                </Link>
-            </div>
-            <div id="card" class="card group">
                 <div class="flex items-center text-sky-950 bg-sky-500 justify-between p-4 pb-3">
                     <div>
                         <p class="font-bold">{{ totalmhs }}</p>
@@ -81,23 +109,9 @@ import { Head } from '@inertiajs/vue3';
                 </Link>
             </div>
             <div id="card" class="card group">
-                <div class="flex items-center text-lime-950 bg-lime-500 justify-between p-4 pb-3">
-                    <div>
-                        <p class="font-bold">{{ totalDsn }}</p>
-                        <p class="text-sm">Dosen</p>
-                    </div>
-                    <FontAwesomeIcon icon="fa-solid fa-user-tie"
-                        class="w-10 h-10 m-1 text-lime-700 group-hover:scale-125 transition-all duration-500" />
-                </div>
-                <Link href="dosen"
-                    class="flex items-center justify-center py-1 text-lime-300 bg-lime-600 group-hover:text-lime-400 group-hover:bg-lime-700">
-                <span class="text-sm">More Info</span>
-                </Link>
-            </div>
-            <div id="card" class="card group">
                 <div class="flex items-center text-amber-950 bg-amber-500 justify-between p-4 pb-3">
                     <div>
-                        <p class="font-bold">{{ totalPrsh }}</p>
+                        <p class="font-bold">0</p>
                         <p class="text-sm">Perusahaan</p>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -112,42 +126,6 @@ import { Head } from '@inertiajs/vue3';
                 <span class="text-sm">More Info</span>
                 </Link>
             </div>
-            <div id="card" class="card group">
-                <div class="flex items-center text-zinc-950 bg-zinc-500 justify-between p-4 pb-3">
-                    <div>
-                        <p class="font-bold">{{ totalMgng }}</p>
-                        <p class="text-sm">Magang</p>
-                    </div>
-                    <FontAwesomeIcon icon="fa-solid fa-briefcase"
-                        class="w-10 h-10 m-1 text-zinc-700 group-hover:scale-125 transition-all duration-500" />
-                </div>
-                <Link href="magang"
-                    class="flex items-center justify-center py-1 text-zinc-300 bg-zinc-600 group-hover:text-zinc-400 group-hover:bg-zinc-700">
-                <span class="text-sm">More Info</span>
-                </Link>
-            </div>
-            <div id="card" class="card group">
-                <div class="flex items-center text-teal-950 bg-teal-500 justify-between p-4 pb-3">
-                    <div>
-                        <p class="font-bold">{{ totalLprn }}</p>
-                        <p class="text-sm">Laporan</p>
-                    </div>
-                    <FontAwesomeIcon icon="fa-solid fa-book"
-                        class="w-8 h-10 m-1 text-teal-700 group-hover:scale-125 transition-all duration-500" />
-                </div>
-                <Link href="laporan"
-                    class="flex items-center justify-center py-1 text-teal-300 bg-teal-600 group-hover:text-teal-400 group-hover:bg-teal-700">
-                <span class="text-sm">More Info</span>
-                </Link>
-            </div>
         </div>
-        <!-- <div id="card" class="bg-white m-4 p-4 border shadow-lg shadow-slate-200 rounded-lg">
-                <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing
-                    elit. Ipsam labore nam, harum repellat delectus voluptas
-                    ipsa quos ullam culpa nesciunt possimus minima sapiente
-                    in eaque atque nihil quae officia voluptatum.
-                </p>
-            </div> -->
     </Sidebar>
 </template>
