@@ -72,7 +72,7 @@ function toggleDrop() {
                     <!-- User -->
                     <div class="">
                         <div class="flex items-center space-x-4" @click="toggleDrop">
-                            <img class="w-10 h-10 rounded-full border-2 border-gray-50 bg-black" src="">
+                            <!-- <img class="w-10 h-10 rounded-full border-2 border-gray-50 bg-black" src=""> -->
                             <div class="font-semibold dark:text-white text-left">
                                 <span class="inline-flex flex-col rounded-md">
                                     <button type="button"
@@ -91,7 +91,7 @@ function toggleDrop() {
                             </div>
                         </div>
                         <div v-show="showDropDown"
-                            class="absolute right-[10px] z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 block text-left text-sm leading-5 text-gray-700 dark:text-gray-300">
+                            class="absolute right-[10px] z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg overflow-hidden ring-1 block text-left text-sm leading-5 text-gray-700 dark:text-gray-300">
                             <Link :href="route('profile.edit')" class="drop-item" role="menuitem" tabindex="-1"
                                 id="menu-item-0">
                             Profile
