@@ -1,15 +1,35 @@
 <script setup lang="ts">
 import NavbarBottom from '@/Components/User/NavbarBottom.vue';
+import axios from 'axios';
+import { ref } from 'vue';
+import { Head } from '@inertiajs/vue3';
+
+const absenMasuk = ref();
+axios.get('api/absenMasuk')
+    .then(result => {
+        console.log(result)
+        absenMasuk.value = result.data.data
+    })
+
+const absenKeluar = ref();
+axios.get('api/absenKeluar')
+    .then(result => {
+        console.log(result)
+        absenKeluar.value = result.data.data
+    })
 </script>
 <template>
-    <div class="h-screen bg-zinc-200 font-montserrat">
-        <header class="h-14 flex items-end justify-center p-2 bg-white shadow-lg">
+    <NavbarBottom>
+
+        <Head title="History" />
+
+        <header class="h-14 flex items-end justify-center p-2 bg-white shadow-lg sticky top-0 z-10">
             <h1 class="font-semibold">Riwayat Absensi</h1>
         </header>
 
         <main class="m-4">
             <div class="grid gap-5 relative lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
-                <div class="bg-white rounded-md shadow-lg p-4  border border-gray-300">
+                <div v-for="Item in absenMasuk" class="bg-white rounded-md shadow-lg p-4  border border-gray-300">
                     <div class="flex py-2 items-center">
                         <div class="p-2 rounded-full mr-5 bg-amber-100">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -19,8 +39,8 @@ import NavbarBottom from '@/Components/User/NavbarBottom.vue';
                             </svg>
                         </div>
                         <div class="text-sm">
-                            <h1 class="font-semibold">Rabu</h1>
-                            <span class="text-xs">25 Oktober 2023</span>
+                            <h1 class="font-semibold">{{ Item.hari }}</h1>
+                            <span class="text-xs">{{ Item.tanggal }}</span>
                         </div>
                     </div>
                     <hr class="border my-2">
@@ -31,7 +51,7 @@ import NavbarBottom from '@/Components/User/NavbarBottom.vue';
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                             </svg>
-                            <span class="text-sm ml-2">07.00</span>
+                            <span class="text-sm ml-2">{{ Item.waktu }}</span>
                         </div>
                         <div class="flex">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
@@ -39,13 +59,11 @@ import NavbarBottom from '@/Components/User/NavbarBottom.vue';
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                             </svg>
-                            <span class="text-sm ml-2">15.00</span>
+                            <span class="text-sm ml-2"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-
-        <NavbarBottom />
-    </div>
+    </NavbarBottom>
 </template>

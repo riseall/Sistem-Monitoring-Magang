@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale'; // Mengimpor bahasa Indonesia
 import NavbarBottom from '@/Components/User/NavbarBottom.vue';
@@ -7,6 +8,7 @@ import Lokasi from '@/Components/User/Lokasi.vue';
 import ModalDialog from '@/Components/ModalDialog.vue';
 import BtnTutup from '@/Components/UI/BtnTutup.vue';
 import AmberBtnVue from '@/Components/User/AmberBtn.vue';
+import axios from 'axios';
 
 //Logic DateTime
 const currentDay = ref('');
@@ -20,6 +22,26 @@ const updateTime = () => {
     currentTime.value = now.toLocaleTimeString();
 
     setTimeout(updateTime, 1000);
+};
+
+//Location
+const latitude = ref<number | null>(null);
+const longitude = ref<number | null>(null);
+const location = ref('');
+const apiKey = 'AIzaSyAONJyXFBJ_0w9CXdp6JgtWxtjMlPovaHA';
+
+const getLocation = () => {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(position => {
+            latitude.value = position.coords.latitude;
+            longitude.value = position.coords.longitude;
+
+            const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${latitude.value},${longitude.value}&key=${apiKey}`;
+            location.value = googleMapsLink;
+        });
+    } else {
+        console.error("Geolocation tidak didukung di perangkat ini.");
+    }
 };
 
 //Open and Close Modal
@@ -51,13 +73,99 @@ const stopCapture = () => {
     }
 };
 
+const takeScreenshot = () => {
+    if (video.value) {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.value.videoWidth;
+        canvas.height = video.value.videoHeight;
+        const ctx = canvas.getContext('2d');
+
+        if (ctx) {
+            ctx.drawImage(video.value, 0, 0, canvas.width, canvas.height);
+            const screenshotDataUrl = canvas.toDataURL('image/png');
+
+            sendScreenshot(screenshotDataUrl);
+        }
+    }
+};
+
+const takeScreenshot_out = () => {
+    if (video.value) {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.value.videoWidth;
+        canvas.height = video.value.videoHeight;
+        const ctx = canvas.getContext('2d');
+
+        if (ctx) {
+            ctx.drawImage(video.value, 0, 0, canvas.width, canvas.height);
+            const screenshotDataUrl = canvas.toDataURL('image/png');
+
+            sendScreenshot_out(screenshotDataUrl);
+        }
+    }
+};
+
+const sendScreenshot = async (dataUrl: string) => {
+    try {
+        // Ubah data URL menjadi blob
+        const blob = await fetch(dataUrl).then((res) => res.blob());
+
+        const formData = new FormData();
+        formData.append('foto', blob, 'png');
+        formData.append('hari', currentDay.value);
+        formData.append('tanggal', currentDate.value);
+        formData.append('waktu', currentTime.value);
+        formData.append('lokasi', location.value);
+
+        // Kirim FormData ke server menggunakan Axios
+        const response = await axios.post('api/absenMasuk', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        console.log('Screenshot uploaded:', response.data);
+    } catch (error) {
+        console.error('Error uploading screenshot:', error);
+    }
+};
+
+const sendScreenshot_out = async (dataUrl: string) => {
+    try {
+        // Ubah data URL menjadi blob
+        const blob = await fetch(dataUrl).then((res) => res.blob());
+
+        const formData = new FormData();
+        formData.append('foto_out', blob, 'png');
+        formData.append('hari_out', currentDay.value);
+        formData.append('tanggal_out', currentDate.value);
+        formData.append('waktu_out', currentTime.value);
+        formData.append('lokasi_out', location.value);
+
+        // Kirim FormData ke server menggunakan Axios
+        const response = await axios.post('api/absenKeluar', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        console.log('Screenshot uploaded:', response.data);
+    } catch (error) {
+        console.error('Error uploading screenshot:', error);
+    }
+};
+
+
 onMounted(() => {
     updateTime();
+    getLocation();
 });
 
 </script>
 <template>
-    <div class="h-screen font-montserrat bg-zinc-200">
+    <NavbarBottom>
+
+        <Head title="Dashboard" />
         <div class="bg-gray-800 text-white p-6 overflow-auto">
             <div class="flex items-center justify-between">
                 <div>
@@ -128,7 +236,7 @@ onMounted(() => {
                 <BtnTutup @click="closeMasuk" />
             </template>
             <video ref="video" class="mt-3 rounded-lg w-full"></video>
-            <AmberBtnVue class="mt-3 space-x-3">
+            <AmberBtnVue @click="takeScreenshot" class="mt-3 space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -146,7 +254,7 @@ onMounted(() => {
                 <BtnTutup @click="closeKeluar" />
             </template>
             <video ref="video" class="mt-3 rounded-lg"></video>
-            <AmberBtnVue class="mt-3 space-x-3">
+            <AmberBtnVue @click="takeScreenshot_out" class="mt-3 space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -157,8 +265,5 @@ onMounted(() => {
                 <span>Ambil</span>
             </AmberBtnVue>
         </ModalDialog>
-
-        <NavbarBottom />
-
-    </div>
+    </NavbarBottom>
 </template>
