@@ -8,6 +8,7 @@ import { Link } from '@inertiajs/vue3';
         </div>
         <div class="h-20">
             <footer class="flex items-center justify-between fixed bottom-0 left-0 right-0 bg-white text-sm p-2 px-8">
+                <!-- Link direct Home -->
                 <Link href="user.dashboard" class="navbottom active:bg-amber-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
@@ -16,6 +17,7 @@ import { Link } from '@inertiajs/vue3';
                 </svg>
                 <span>Home</span>
                 </Link>
+                <!-- Link direct history -->
                 <Link href="user.history" class="navbottom active:bg-amber-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
@@ -24,6 +26,7 @@ import { Link } from '@inertiajs/vue3';
                 </svg>
                 <span>History</span>
                 </Link>
+                <!-- Link direct profile -->
                 <Link href="user.profile" class="navbottom active:bg-amber-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
@@ -31,6 +34,17 @@ import { Link } from '@inertiajs/vue3';
                         d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
                 </svg>
                 <span>Profile</span>
+                </Link>
+                <!-- Link logout -->
+                <Link :href="route('logout')" method="post" as="button"
+                    class="flex flex-col items-center p-2 rounded-lg transition duration-200 hover:bg-rose-500 hover:text-white"
+                    role="menuitem" tabindex="-1" id="menu-item-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+                <span>LogOut</span>
                 </Link>
             </footer>
         </div>

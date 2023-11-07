@@ -29,5 +29,5 @@
 }
 
 .navbottom {
-    @apply flex flex-col items-center p-2 rounded-lg transition duration-200 hover:bg-amber-300 hover:text-white
+    @apply flex flex-col items-center p-2 rounded-lg transition duration-200 hover:bg-amber-400 hover:text-white
 }
