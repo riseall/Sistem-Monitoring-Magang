@@ -59,8 +59,8 @@ Route::get('mahasiswa', function () {
     return Inertia::render('Admin/Mahasiswa');
 });
 
-Route::get('perusahaan', function () {
-    return Inertia::render('Admin/Perusahaan');
+Route::get('magang', function () {
+    return Inertia::render('Admin/Magang');
 });
 
 Route::get('absensi', function () {
