@@ -276,7 +276,8 @@ const deleteUser = async (id: string) => {
                         <InputForm>
                             <template v-slot:title>Foto</template>
                             <template v-slot:input>
-                                <input type="file" ref="fileInput" @change="handleFileChange" class="input-form" />
+                                <input type="file" ref="fileInput" @change="handleFileChange"
+                                    class="input-form  file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
                             </template>
                         </InputForm>
                     </div>
@@ -358,7 +359,8 @@ const deleteUser = async (id: string) => {
                         <InputForm>
                             <template v-slot:title>Foto</template>
                             <template v-slot:input>
-                                <input type="file" ref="fileInput" @change="handleFileChange" class="input-form" />
+                                <input type="file" ref="fileInput" @change="handleFileChange"
+                                    class="input-form file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
                             </template>
                         </InputForm>
                     </div>
