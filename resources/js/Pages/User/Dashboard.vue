@@ -170,7 +170,7 @@ onMounted(() => {
             <div class="flex items-center justify-between">
                 <div>
                     <h1>Halo!!</h1>
-                    <!-- <span class="text-xl font-bold">{{ $page.props.auth.user.name }}</span> -->
+                    <span class="text-xl font-bold">{{ $page.props.auth.user.name }}</span>
                 </div>
                 <span class="text-sm">{{ currentTime }}</span>
             </div>
