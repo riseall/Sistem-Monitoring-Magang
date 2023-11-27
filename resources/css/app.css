@@ -4,3 +4,30 @@
 @tailwind components;
 @tailwind utilities;
 
+.th-items {
+    @apply p-2 text-[13px] font-medium
+}
+
+.td-items {
+    @apply p-3 text-gray-600 text-sm font-normal ml-2 truncate
+}
+
+.input-form {
+    @apply border-0 px-3 py-3 placeholder-gray-300 text-gray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150
+}
+
+.card{
+    @apply flex flex-col shadow-md shadow-slate-200 rounded-lg overflow-hidden
+}
+
+.nav-item {
+    @apply flex text-sm items-center justify-start space-x-2 py-3 px-7 hover:bg-gray-950 rounded-md hover:text-gray-400 active:bg-gray-800 focus:ring-1 focus:ring-gray-300 transition duration-200
+}
+
+.drop-item {
+    @apply w-full text-left text-gray-700 block px-3 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out
+}
+
+.navbottom {
+    @apply flex flex-col items-center p-2 rounded-lg transition duration-200 hover:text-amber-600
+}

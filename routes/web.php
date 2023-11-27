@@ -31,9 +31,9 @@ Route::get('/', function () {
 Route::get('auth/google', [ProviderController::class, 'redirect'])->name('googleAuth');
 Route::get('auth/google/callback', [ProviderController::class, 'callbackGoogle']);
 
-Route::get('/homes', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/homes', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -53,7 +53,7 @@ Route::get('home', function () {
 
 Route::get('dashboard', function () {
     return Inertia::render('Admin/Dashboard');
-});
+})->middleware('checkAdmin');
 
 Route::get('mahasiswa', function () {
     return Inertia::render('Admin/Mahasiswa');
@@ -72,14 +72,18 @@ Route::get('absensi', function () {
 
 Route::get('user.dashboard', function () {
     return Inertia::render('User/Dashboard');
-});
+})->name('user.dashboard');
 
 Route::get('user.history', function () {
     return Inertia::render('User/History');
 });
 
-Route::get('user.dashboard', function () {
-    return Inertia::render('User/Dashboard');
+Route::get('user.profile', function () {
+    return Inertia::render('User/Profile');
+});
+
+Route::get('user.location', function () {
+    return Inertia::render('User/Location');
 });
 
 require __DIR__ . '/auth.php';

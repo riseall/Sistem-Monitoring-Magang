@@ -57,7 +57,7 @@ function toggleDrop() {
             </nav>
         </div>
         <!-- Main content -->
-        <div class="flex flex-col w-full h-screen overflow-auto bg-gray-100 ">
+        <div class="flex flex-col w-full h-screen overflow-auto bg-gray-200 ">
             <!-- Header -->
             <div class="bg-white border shadow-lg px-2 py-4 sticky top-0 z-10">
                 <div class="bg-white flex items-center justify-between px-5 z-10">
@@ -72,7 +72,7 @@ function toggleDrop() {
                     <!-- User -->
                     <div class="">
                         <div class="flex items-center space-x-4" @click="toggleDrop">
-                            <img class="w-10 h-10 rounded-full border-2 border-gray-50 bg-black" src="">
+                            <!-- <img class="w-10 h-10 rounded-full border-2 border-gray-50 bg-black" src=""> -->
                             <div class="font-semibold dark:text-white text-left">
                                 <span class="inline-flex flex-col rounded-md">
                                     <button type="button"
@@ -86,12 +86,13 @@ function toggleDrop() {
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </button>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">Admin</span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ $page.props.auth.user.role
+                                    }}</span>
                                 </span>
                             </div>
                         </div>
                         <div v-show="showDropDown"
-                            class="absolute right-[10px] z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 block text-left text-sm leading-5 text-gray-700 dark:text-gray-300">
+                            class="absolute right-[10px] z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg overflow-hidden ring-1 block text-left text-sm leading-5 text-gray-700 dark:text-gray-300">
                             <Link :href="route('profile.edit')" class="drop-item" role="menuitem" tabindex="-1"
                                 id="menu-item-0">
                             Profile
@@ -105,18 +106,9 @@ function toggleDrop() {
                 </div>
             </div>
             <!-- content -->
-            <div class="p-8 min-h-[calc(100vh-(5rem-6px))] bg-gray-100 max-w-full">
+            <div class="p-8 min-h-[calc(100vh-(5rem-6px))] max-w-full">
                 <slot />
             </div>
         </div>
     </aside>
 </template>
-<style>
-.nav-item {
-    @apply flex text-sm items-center justify-start space-x-2 py-3 px-7 hover:bg-gray-950 rounded-md hover:text-gray-400 active:bg-gray-800 focus:ring-1 focus:ring-gray-300 transition duration-200
-}
-
-.drop-item {
-    @apply w-full text-left text-gray-700 block px-3 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out
-}
-</style>

@@ -44,6 +44,8 @@ class MahasiswaController extends Controller
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
             $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
+        } else {
+            $fileNama = 'pas_foto_kosong.png';
         }
 
         //Simpan referensi foto pada database
