@@ -28,11 +28,13 @@ Route::apiResource('pegawai', PegawaiController::class);
 
 Route::apiResource('mahasiswa', MahasiswaController::class);
 
-<<<<<<< HEAD
 Route::apiResource('perusahaan', PerusahaanController::class);
 
 Route::apiResource('magang', MagangController::class);
-=======
+
+Route::apiResource('laporan', LaporanController::class);
+
+Route::apiResource('dosen', DosenController::class);
+
 Route::apiResource('absenMasuk', AbsenMasukController::class);
 Route::apiResource('absenKeluar', AbsenKeluarController::class);
->>>>>>> bfdc882930a01a03d42dc9798314137ee3d8ef29

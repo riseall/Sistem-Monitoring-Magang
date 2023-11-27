@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMagangRequest extends FormRequest
+class UpdateLaporanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class UpdateMagangRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'periode' => 'sometimes|date',
-            'posisi' => 'sometimes|string',
+            'judul_laporan' => 'sometimes|string',
+            'laporan' => 'sometimes|string',
         ];
     }
 }

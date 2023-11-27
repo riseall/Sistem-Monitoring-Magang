@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('magang', function (Blueprint $table) {
             $table->id();
-            $table->date('periode');
-            $table->string('posisi');
+            $table->string('judul_laporan');
+            $table->string('laporan');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('magang');
+        Schema::dropIfExists('laporan');
     }
 };
