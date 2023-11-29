@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AbsenMasuk extends Model
+class perusahaan extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = "absen_masuk";
+    protected $table = 'perusahaan';
 
     protected $hidden = [
         'created_at',
@@ -19,16 +19,13 @@ class AbsenMasuk extends Model
         'deleted_at',
     ];
     protected $fillable = [
-        "mahasiswa_id",
-        "foto",
-        "hari",
-        "tanggal",
-        "waktu",
-        "lokasi",
+        'nama',
+        'email',
+        'alamat'
     ];
 
-    public function mahasiswa(): BelongsTo
+    public function magang(): HasMany
     {
-        return $this->belongsTo(Mahasiswa::class);
+        return $this->hasMany(magang::class);
     }
 }
