@@ -13,12 +13,11 @@ return new class extends Migration {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id();
             $table->string('foto')->nullable();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('nama');
             $table->integer('nim');
             $table->string('kelas');
             $table->string('telepon');
-            /* $table->string('email'); */
+            $table->string('email');
             $table->text('alamat');
             $table->timestamps();
             $table->softDeletes();
