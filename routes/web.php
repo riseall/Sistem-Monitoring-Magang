@@ -55,8 +55,14 @@ Route::get('dashboard', function () {
     return Inertia::render('Admin/Dashboard');
 })->middleware('checkAdmin');
 
+Route::get('user', function () {
+    return Inertia::render('Admin/User');
+});
 Route::get('mahasiswa', function () {
     return Inertia::render('Admin/Mahasiswa');
+});
+Route::get('dosen', function () {
+    return Inertia::render('Admin/Dosen');
 });
 
 Route::get('perusahaan', function () {
@@ -67,8 +73,14 @@ Route::get('magang', function () {
     return Inertia::render('Admin/Magang');
 });
 
+Route::get('magang', function () {
+    return Inertia::render('Admin/Magang');
+});
 Route::get('absensi', function () {
     return Inertia::render('Admin/Absensi');
+});
+Route::get('laporan', function () {
+    return Inertia::render('Admin/Laporan');
 });
 
 

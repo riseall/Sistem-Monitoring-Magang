@@ -2,34 +2,49 @@
 
 namespace App\Models;
 
-use App\Models\Mahasiswa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AbsenKeluar extends Model
+class magang extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = "absen_keluar";
+    protected $table = 'magang';
 
     protected $hidden = [
         'created_at',
         'updated_at',
         'deleted_at',
     ];
+
     protected $fillable = [
         'mahasiswa_id',
-        "foto_out",
-        "hari_out",
-        "tanggal_out",
-        "waktu_out",
-        "lokasi_out",
+        'perusahaaan_id',
+        'periode',
+        'posisi',
+        'dosen_id',
+        'laporan_id'
     ];
 
     public function mahasiswa(): BelongsTo
     {
         return $this->belongsTo(Mahasiswa::class);
+    }
+
+    public function perusahaan(): BelongsTo
+    {
+        return $this->belongsTo(perusahaan::class);
+    }
+
+    public function dosen(): BelongsTo
+    {
+        return $this->belongsTo(dosen::class);
+    }
+
+    public function laporan(): BelongsTo
+    {
+        return $this->belongsTo(laporan::class);
     }
 }

@@ -10,14 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('absen_keluar', function (Blueprint $table) {
+        Schema::create('magang', function (Blueprint $table) {
             $table->id();
             $table->foreignId('mahasiswa_id')->constrained('mahasiswa')->cascadeOnDelete();
-            $table->string('foto_out');
-            $table->string('hari_out');
-            $table->string('tanggal_out');
-            $table->time('waktu_out');
-            $table->string('lokasi_out');
+            $table->foreignId('perusahaan_id')->constrained('perusahaan')->cascadeOnDelete();
+            $table->string('periode');
+            $table->string('posisi');
+            $table->foreignId('dosen_id')->constrained('dosen')->cascadeOnDelete();
+            $table->foreignId('laporan_id')->constrained('laporan')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('absen_keluar');
+        Schema::dropIfExists('magang');
     }
 };

@@ -5,7 +5,11 @@ import { createApp, h, DefineComponent } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-
+/* import the fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faBook, faBriefcase, faBuilding, faChevronRight, faClipboard, faHouseChimney, faUserTie, faUsers} from '@fortawesome/free-solid-svg-icons'
+library.add(faHouseChimney, faUsers, faChevronRight, faBuilding, faBriefcase, faClipboard, faBook, faUserTie)
 const appName = import.meta.env.VITE_APP_NAME || 'Internship Monitor';
 
 createInertiaApp({
@@ -15,6 +19,7 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .component('font-awesome-icon', FontAwesomeIcon)
             .mount(el);
     },
     progress: {

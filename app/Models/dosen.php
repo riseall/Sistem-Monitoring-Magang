@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use App\Models\Mahasiswa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AbsenKeluar extends Model
+class dosen extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = "absen_keluar";
+    protected $table = 'dosen';
 
     protected $hidden = [
         'created_at',
@@ -20,16 +20,14 @@ class AbsenKeluar extends Model
         'deleted_at',
     ];
     protected $fillable = [
-        'mahasiswa_id',
-        "foto_out",
-        "hari_out",
-        "tanggal_out",
-        "waktu_out",
-        "lokasi_out",
+        'nip',
+        'nama',
+        'telepon',
+        'alamat'
     ];
 
-    public function mahasiswa(): BelongsTo
+    public function magang(): HasMany
     {
-        return $this->belongsTo(Mahasiswa::class);
+        return $this->hasMany(magang::class);
     }
 }
