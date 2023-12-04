@@ -20,17 +20,11 @@ class dosen extends Model
         'deleted_at',
     ];
     protected $fillable = [
-        'user_id',
         'nip',
         'nama',
         'telepon',
         'alamat'
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function magang(): HasMany
     {

@@ -306,9 +306,10 @@ onMounted(() => {
                                 <select name="" id="" v-model="formData.mahasiswa_id" class="input-form">
                                     <option class="bg-slate-300" value="">Masukkan Nama Mahasiswa</option>
                                     <option v-for="(M, index) in mhs" class="bg-slate-300" :key="index" :value="M.id">{{
-                                        M.nama }}</option>
+                        M.nama }}</option>
                                 </select>
-                                <div class="text-red-400 text-sm" v-if="errors?.mahasiswa_id">{{ errors.mahasiswa_id[0] }}
+                                <div class="text-red-400 text-sm" v-if="errors?.mahasiswa_id">{{ errors.mahasiswa_id[0]
+                                    }}
                                 </div>
                             </div>
                         </div>
@@ -323,9 +324,10 @@ onMounted(() => {
                                 <select name="" id="" v-model="formData.perusahaan_id" class="input-form">
                                     <option value="">Masukkan Nama Perusahaan</option>
                                     <option v-for="(M, index) in prs" class="bg-slate-300" :key="index" :value="M.id">{{
-                                        M.nama }}</option>
+                        M.nama }}</option>
                                 </select>
-                                <div class="text-red-400 text-sm" v-if="errors?.perusahaan_id">{{ errors.perusahaan_id[0] }}
+                                <div class="text-red-400 text-sm" v-if="errors?.perusahaan_id">{{
+                        errors.perusahaan_id[0] }}
                                 </div>
                             </div>
                         </div>
@@ -365,7 +367,7 @@ onMounted(() => {
                                 <select name="" id="" v-model="formData.dosen_id" class="input-form">
                                     <option value="">Masukkan Nama Dosen</option>
                                     <option v-for="(M, index) in dsn" class="bg-slate-300" :key="index" :value="M.id">{{
-                                        M.nama }}</option>
+                        M.nama }}</option>
                                 </select>
                                 <div class="text-red-400 text-sm" v-if="errors?.dosen_id">{{ errors.dosen_id[0] }}</div>
                             </div>
@@ -380,9 +382,10 @@ onMounted(() => {
                                 <select name="" id="" v-model="formData.laporan_id" class="input-form">
                                     <option value="">Masukkan Judul Laporan</option>
                                     <option v-for="(M, index) in lpr" class="bg-slate-300" :key="index" :value="M.id">{{
-                                        M.judul_laporan }}</option>
+                        M.judul_laporan }}</option>
                                 </select>
-                                <div class="text-red-400 text-sm" v-if="errors?.laporan_id">{{ errors.laporan_id[0] }}</div>
+                                <div class="text-red-400 text-sm" v-if="errors?.laporan_id">{{ errors.laporan_id[0] }}
+                                </div>
                             </div>
                         </div>
                     </div>

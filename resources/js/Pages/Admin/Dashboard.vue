@@ -3,6 +3,7 @@ import Sidebar from '@/Components/Sidebar.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import axios from 'axios';
 import { computed, ref } from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 /* Total absen masuk */
 const absenMasuk = ref();
@@ -90,6 +91,20 @@ const totalmhs = computed(() => {
                 </Link>
             </div>
             <div id="card" class="card group">
+                <div class="flex items-center text-fuchsia-950 bg-fuchsia-500 justify-between p-4 pb-3">
+                    <div>
+                        <p class="font-bold">{{ totalmhs }}</p>
+                        <p class="text-sm">User</p>
+                    </div>
+                    <FontAwesomeIcon icon="fa-solid fa-users"
+                        class="w-10 h-10 m-1 text-fuchsia-700 group-hover:scale-125 transition-all duration-500" />
+                </div>
+                <Link href="mahasiswa"
+                    class="flex items-center justify-center py-1 text-fuchsia-300 bg-fuchsia-600 group-hover:text-fuchsia-400 group-hover:bg-fuchsia-700">
+                <span class="text-sm">More Info</span>
+                </Link>
+            </div>
+            <div id="card" class="card group">
                 <div class="flex items-center text-sky-950 bg-sky-500 justify-between p-4 pb-3">
                     <div>
                         <p class="font-bold">{{ totalmhs }}</p>
@@ -109,6 +124,20 @@ const totalmhs = computed(() => {
                 </Link>
             </div>
             <div id="card" class="card group">
+                <div class="flex items-center text-lime-950 bg-lime-500 justify-between p-4 pb-3">
+                    <div>
+                        <p class="font-bold">{{ totalmhs }}</p>
+                        <p class="text-sm">Dosen</p>
+                    </div>
+                    <FontAwesomeIcon icon="fa-solid fa-user-tie"
+                        class="w-10 h-10 m-1 text-lime-700 group-hover:scale-125 transition-all duration-500" />
+                </div>
+                <Link href="mahasiswa"
+                    class="flex items-center justify-center py-1 text-lime-300 bg-lime-600 group-hover:text-lime-400 group-hover:bg-lime-700">
+                <span class="text-sm">More Info</span>
+                </Link>
+            </div>
+            <div id="card" class="card group">
                 <div class="flex items-center text-amber-950 bg-amber-500 justify-between p-4 pb-3">
                     <div>
                         <p class="font-bold">0</p>
@@ -123,6 +152,34 @@ const totalmhs = computed(() => {
                 </div>
                 <Link href="perusahaan"
                     class="flex items-center justify-center py-1 text-amber-300 bg-amber-600 group-hover:text-amber-400 group-hover:bg-amber-700">
+                <span class="text-sm">More Info</span>
+                </Link>
+            </div>
+            <div id="card" class="card group">
+                <div class="flex items-center text-zinc-950 bg-zinc-500 justify-between p-4 pb-3">
+                    <div>
+                        <p class="font-bold">0</p>
+                        <p class="text-sm">Magang</p>
+                    </div>
+                    <FontAwesomeIcon icon="fa-solid fa-briefcase"
+                        class="w-10 h-10 m-1 text-zinc-700 group-hover:scale-125 transition-all duration-500" />
+                </div>
+                <Link href="perusahaan"
+                    class="flex items-center justify-center py-1 text-zinc-300 bg-zinc-600 group-hover:text-zinc-400 group-hover:bg-zinc-700">
+                <span class="text-sm">More Info</span>
+                </Link>
+            </div>
+            <div id="card" class="card group">
+                <div class="flex items-center text-teal-950 bg-teal-500 justify-between p-4 pb-3">
+                    <div>
+                        <p class="font-bold">0</p>
+                        <p class="text-sm">Laporan</p>
+                    </div>
+                    <FontAwesomeIcon icon="fa-solid fa-book"
+                        class="w-8 h-10 m-1 text-teal-700 group-hover:scale-125 transition-all duration-500" />
+                </div>
+                <Link href="perusahaan"
+                    class="flex items-center justify-center py-1 text-teal-300 bg-teal-600 group-hover:text-teal-400 group-hover:bg-teal-700">
                 <span class="text-sm">More Info</span>
                 </Link>
             </div>

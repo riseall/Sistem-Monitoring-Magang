@@ -11,6 +11,7 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import BtnTutup from '@/Components/UI/BtnTutup.vue';
 import BtnEdit from '@/Components/UI/BtnEdit.vue';
 import BtnDelete from '@/Components/UI/BtnDelete.vue';
+import { onMounted } from 'vue';
 
 const isOpen = ref(false)
 const isEdit = ref(false)
@@ -63,11 +64,14 @@ type Mahasiswa = {
 }
 
 const mahasiswa = ref<Mahasiswa[]>([]);
-axios.get<Response>('api/mahasiswa')
-    .then(result => {
-        console.log(result)
-        mahasiswa.value = result.data.data
-    })
+
+const getMhs = async () => {
+    await axios.get<Response>('api/mahasiswa')
+        .then(result => {
+            console.log(result)
+            mahasiswa.value = result.data.data
+        });
+}
 
 const formData: Ref<Mahasiswa> = ref({
     id: '',
@@ -114,6 +118,7 @@ const postData = async (event: Event) => {
         console.log('Berhasil Menambahkan Data', response.data);
         alert(response.data.message);
         isOpen.value = false;
+        getMhs()
     } catch (error) {
         // response error
         console.error('Post gagal:', error);
@@ -146,6 +151,7 @@ const updateData = async () => {
         console.log('Berhasil Memperbarui Data', response.data);
         alert(response.data.message);
         isEdit.value = false;
+        getMhs();
         // You may also need to update the `mahasiswa` list if you're maintaining a list of students
     } catch (error) {
         console.error('Update gagal:', error);
@@ -169,6 +175,10 @@ const deleteUser = async (id: string) => {
     }
 };
 
+onMounted(() => {
+    getMhs()
+});
+
 </script>
 <template>
 
@@ -184,7 +194,7 @@ const deleteUser = async (id: string) => {
             <div class="container overflow-x-auto rounded-lg">
                 <!-- Table Mahasiswa -->
                 <table class="w-full align-middle border border-collapse">
-                    <thead class="text-left text-gray-100 bg-emerald-500 sticky top-0 rounded-lg">
+                    <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">
                         <tr class="table-row">
                             <th class="th-items">No</th>
                             <th class="th-items">Foto</th>
@@ -276,25 +286,31 @@ const deleteUser = async (id: string) => {
                     <hr class="mt-2 border-b-1 border-blueGray-300" />
 
                     <div class="flex flex-wrap mt-5">
-                        <InputForm>
-                            <template v-slot:title>Foto</template>
-                            <template v-slot:input>
+                        <div class="w-full lg:w-12/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Foto
+                                </label>
                                 <input type="file" ref="fileInput" @change="handleFileChange"
-                                    class="input-form  file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
-                            </template>
-                        </InputForm>
+                                    class="input-form file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
+                            </div>
+                        </div>
                     </div>
 
                     <hr class="mt-6 border-b-1 border-blueGray-300" />
 
                     <div class="flex flex-wrap mt-5">
-                        <InputForm>
-                            <template v-slot:title>Alamat</template>
-                            <template v-slot:input>
+                        <div class="w-full lg:w-12/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Alamat
+                                </label>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
                                     class="input-form"></textarea>
-                            </template>
-                        </InputForm>
+                            </div>
+                        </div>
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">
@@ -360,25 +376,31 @@ const deleteUser = async (id: string) => {
                     <hr class="mt-2 border-b-1 border-blueGray-300" />
 
                     <div class="flex flex-wrap mt-5">
-                        <InputForm>
-                            <template v-slot:title>Foto</template>
-                            <template v-slot:input>
+                        <div class="w-full lg:w-12/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Foto
+                                </label>
                                 <input type="file" ref="fileInput" @change="handleFileChange"
                                     class="input-form file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
-                            </template>
-                        </InputForm>
+                            </div>
+                        </div>
                     </div>
 
                     <hr class="mt-6 border-b-1 border-blueGray-300" />
 
                     <div class="flex flex-wrap mt-5">
-                        <InputForm>
-                            <template v-slot:title>Alamat</template>
-                            <template v-slot:input>
+                        <div class="w-full lg:w-12/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Alamat
+                                </label>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
                                     class="input-form"></textarea>
-                            </template>
-                        </InputForm>
+                            </div>
+                        </div>
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">

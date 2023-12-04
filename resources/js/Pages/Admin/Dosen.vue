@@ -197,6 +197,7 @@ onMounted(() => {
 })
 </script>
 <template>
+
     <Head title="Dosen" />
 
     <Sidebar>
@@ -208,7 +209,8 @@ onMounted(() => {
                 <div>
                     <input type="text" class="rounded-lg text-xs p-[0.3 rem]" v-model="keywords" placeholder="Search">
                     <ul v-if="results.length > 0">
-                        <li v-for="result in results" :key="result.id" v-text="result.nama, result.nip, result.alamat"></li>
+                        <li v-for="result in results" :key="result.id" v-text="result.nama, result.nip, result.alamat">
+                        </li>
                     </ul>
                 </div>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>

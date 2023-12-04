@@ -107,6 +107,7 @@ onMounted(() => {
 })
 </script>
 <template>
+
     <Head title="Laporan" />
 
     <Sidebar>
