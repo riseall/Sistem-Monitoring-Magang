@@ -23,6 +23,7 @@ class StorePerusahaanRequest extends FormRequest
     {
         return [
             'nama' => 'required|string|max:255',
+            'email' => 'required',
             'alamat' => 'required',
         ];
     }

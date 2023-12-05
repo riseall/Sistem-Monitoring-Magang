@@ -24,6 +24,7 @@ class UpdatePerusahaanRequest extends FormRequest
         return [
             'nama' => 'sometimes|string|max:255',
             'alamat' => 'sometimes|string',
+            'alamat' => 'sometimes|string',
         ];
     }
 }

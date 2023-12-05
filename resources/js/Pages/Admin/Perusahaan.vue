@@ -11,6 +11,7 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import BtnTutup from '@/Components/UI/BtnTutup.vue';
 import BtnEdit from '@/Components/UI/BtnEdit.vue';
 import BtnDelete from '@/Components/UI/BtnDelete.vue';
+import { fromUnixTime } from 'date-fns';
 
 const isOpen = ref(false)
 const isEdit = ref(false)
@@ -24,6 +25,7 @@ const editOpen = (id: string) => {
     })
     formData.value.id = selectedPerusahaan?.id ?? '-'
     formData.value.nama = selectedPerusahaan?.nama ?? ''
+    formData.value.email = selectedPerusahaan?.email ?? ''
     formData.value.alamat = selectedPerusahaan?.alamat ?? ''
 }
 
@@ -32,6 +34,7 @@ const editClose = () => {
     formData.value = {
         id: '',
         nama: '',
+        email: '',
         alamat: ''
     }
 }
@@ -44,6 +47,7 @@ type Response = {
 type Perusahaan = {
     id: string,
     nama: string,
+    email: string,
     alamat: string
 }
 
@@ -57,6 +61,7 @@ axios.get<Response>('api/perusahaan')
 const formData: Ref<Perusahaan> = ref({
     id: '',
     nama: '',
+    email: '',
     alamat: ''
 });
 
@@ -65,6 +70,7 @@ const postData = async (event: Event) => {
 
     const form = new FormData();
     form.append('nama', formData.value.nama);
+    form.append('email', formData.value.email);
     form.append('alamat', formData.value.alamat);
 
     try {
@@ -87,6 +93,7 @@ const postData = async (event: Event) => {
 const updateData = async () => {
     const form = new FormData();
     form.append('nama', formData.value.nama);
+    form.append('email', formData.value.email)
     form.append('alamat', formData.value.alamat);
 
     try{
@@ -140,6 +147,7 @@ const deleteUser = async (id: string) => {
                         <tr class="table-row">
                             <th class="th-items">No</th>
                             <th class="th-items">Nama Perusahaan</th>
+                            <th class="th-items">Email Perusahaan</th>
                             <th class="th-items">Alamat Perusahaan</th>
                             <th class="th-items">Action</th>
                         </tr>
@@ -148,6 +156,7 @@ const deleteUser = async (id: string) => {
                         <tr class="even:bg-gray-50" v-for="(Item, index) in perusahaan" :key="Item.id">
                             <td class="td-items">{{ index + 1 }}</td>
                             <td class="td-items">{{ Item.nama }}</td>
+                            <td class="td-items">{{ Item.email }}</td>
                             <td class="td-items">{{ Item.alamat }}</td>
                             <td class="p-3 text-white">
                                 <div class="flex items-center space-x-2">
@@ -172,9 +181,18 @@ const deleteUser = async (id: string) => {
                 <form @submit.prevent="postData">
                     <div class="flex flex-wrap mt-3">
                         <InputForm>
-                            <template v-slot:title>Nama</template>
+                            <template v-slot:title>Nama Perusahaan</template>
                             <template v-slot:input>
                                 <input type="text" v-model="formData.nama" placeholder="Nama" class="input-form" />
+                            </template>
+                        </InputForm>
+                    </div>
+
+                    <div class="flex flex-wrap mt-3">
+                        <InputForm>
+                            <template v-slot:title>Email Perusahaan</template>
+                            <template v-slot:input>
+                                <input type="text" v-model="formData.email" placeholder="Email" class="input-form" />
                             </template>
                         </InputForm>
                     </div>
@@ -183,7 +201,7 @@ const deleteUser = async (id: string) => {
 
                         <div class="flex flex-wrap mt-5">
                         <InputForm>
-                            <template v-slot:title>Alamat</template>
+                            <template v-slot:title>Alamat Perusahaan</template>
                             <template v-slot:input>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
                                     class="input-form"></textarea>
@@ -212,9 +230,18 @@ const deleteUser = async (id: string) => {
                 <form @submit.prevent="updateData">
                     <div class="flex flex-wrap mt-3">
                         <InputForm>
-                            <template v-slot:title>Nama</template>
+                            <template v-slot:title>Nama Perusahaan</template>
                             <template v-slot:input>
                                 <input type="text" v-model="formData.nama" placeholder="Nama" class="input-form" />
+                            </template>
+                        </InputForm>
+                    </div>
+
+                    <div class="flex flex-wrap mt-3">
+                        <InputForm>
+                            <template v-slot:title>Email Perusahaan</template>
+                            <template v-slot:input>
+                                <input type="text" v-model="formData.email" placeholder="Email" class="input-form" />
                             </template>
                         </InputForm>
                     </div>
@@ -223,7 +250,7 @@ const deleteUser = async (id: string) => {
 
                     <div class="flex flex-wrap mt-5">
                         <InputForm>
-                            <template v-slot:title>Alamat</template>
+                            <template v-slot:title>Alamat Perusahaan</template>
                             <template v-slot:input>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
                                     class="input-form"></textarea>
