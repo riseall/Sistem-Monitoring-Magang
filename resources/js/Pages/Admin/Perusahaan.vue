@@ -12,6 +12,7 @@ import BtnTutup from '@/Components/UI/BtnTutup.vue';
 import BtnEdit from '@/Components/UI/BtnEdit.vue';
 import BtnDelete from '@/Components/UI/BtnDelete.vue';
 import { fromUnixTime } from 'date-fns';
+import { onMounted } from 'vue';
 
 const isOpen = ref(false)
 const isEdit = ref(false)
@@ -52,11 +53,14 @@ type Perusahaan = {
 }
 
 const perusahaan = ref<Perusahaan[]>([]);
-axios.get<Response>('api/perusahaan')
-    .then(result => {
-        console.log(result)
-        perusahaan.value = result.data.data
-    })
+
+const getPrs= async () => {
+    await axios.get<Response>('api/perusahaan')
+        .then(result => {
+            console.log(result)
+            perusahaan.value = result.data.data
+        });
+    }
 
 const formData: Ref<Perusahaan> = ref({
     id: '',
@@ -83,6 +87,7 @@ const postData = async (event: Event) => {
         console.log('Berhasil Menambahkan Data', response.data);
         alert(response.data.message);
         isOpen.value = false;
+        getPrs()
     } catch (error) {
         // response error
         console.error('Post gagal:', error);
@@ -97,7 +102,7 @@ const updateData = async () => {
     form.append('alamat', formData.value.alamat);
 
     try{
-        const response = await axios.put(`api/perusahaan/${formData.value.id}`, form, {
+        const response = await axios.post(`api/perusahaan/${formData.value.id}`, form, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -105,9 +110,10 @@ const updateData = async () => {
 
     // Handle the update response
     console.log('Berhasil Memperbarui Data', response.data);
-        alert(response.data.message);
-        isEdit.value = false;
-        // You may also need to update the `` list if you're maintaining a list of students
+    alert(response.data.message);
+    isEdit.value = false;
+    getPrs
+    // You may also need to update the `` list if you're maintaining a list of students
     } catch (error) {
         console.error('Update gagal:', error);
     }
@@ -129,6 +135,9 @@ const deleteUser = async (id: string) => {
     }
 };
 
+onMounted(() => {
+    getPrs
+});
 
 </script>
 <template>
@@ -186,13 +195,15 @@ const deleteUser = async (id: string) => {
                                 <input type="text" v-model="formData.nama" placeholder="Nama" class="input-form" />
                             </template>
                         </InputForm>
-                    </div>
 
-                    <div class="flex flex-wrap mt-3">
                         <InputForm>
-                            <template v-slot:title>Email Perusahaan</template>
+                            <template v-slot:title>Email</template>
                             <template v-slot:input>
-                                <input type="text" v-model="formData.email" placeholder="Email" class="input-form" />
+                                <input type="email" v-model="formData.email" placeholder="Email"
+                                    class="peer invalid:ring-pink-600 input-form" />
+                                <p class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
+                                    Masukkan alamat email yang valid.
+                                </p>
                             </template>
                         </InputForm>
                     </div>
@@ -200,13 +211,16 @@ const deleteUser = async (id: string) => {
                         <hr class="mt-6 border-b-1 border-blueGray-300" />
 
                         <div class="flex flex-wrap mt-5">
-                        <InputForm>
-                            <template v-slot:title>Alamat Perusahaan</template>
-                            <template v-slot:input>
+                        <div class="w-full lg:w-12/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Alamat
+                                </label>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
                                     class="input-form"></textarea>
-                            </template>
-                        </InputForm>
+                            </div>
+                        </div>
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">
@@ -235,13 +249,15 @@ const deleteUser = async (id: string) => {
                                 <input type="text" v-model="formData.nama" placeholder="Nama" class="input-form" />
                             </template>
                         </InputForm>
-                    </div>
 
-                    <div class="flex flex-wrap mt-3">
                         <InputForm>
-                            <template v-slot:title>Email Perusahaan</template>
+                            <template v-slot:title>Email</template>
                             <template v-slot:input>
-                                <input type="text" v-model="formData.email" placeholder="Email" class="input-form" />
+                                <input type="email" v-model="formData.email" placeholder="Email"
+                                    class="peer invalid:ring-pink-600 input-form" />
+                                <p class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
+                                    Masukkan alamat email yang valid.
+                                </p>
                             </template>
                         </InputForm>
                     </div>
@@ -249,13 +265,16 @@ const deleteUser = async (id: string) => {
                     <hr class="mt-6 border-b-1 border-blueGray-300" />
 
                     <div class="flex flex-wrap mt-5">
-                        <InputForm>
-                            <template v-slot:title>Alamat Perusahaan</template>
-                            <template v-slot:input>
+                        <div class="w-full lg:w-12/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Alamat
+                                </label>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
                                     class="input-form"></textarea>
-                            </template>
-                        </InputForm>
+                            </div>
+                        </div>
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">
