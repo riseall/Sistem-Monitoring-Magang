@@ -54,7 +54,6 @@ class AbsenKeluarController extends Controller
     public function store(StoreAbsenKeluarRequest $request)
     {
         $validate = $request->validated();
-
         $createdAbsen = AbsenKeluar::query()->create($validate);
 
         if ($request->hasFile('foto_out')) {

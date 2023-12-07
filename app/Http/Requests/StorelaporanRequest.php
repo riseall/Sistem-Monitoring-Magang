@@ -11,7 +11,7 @@ class StorelaporanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StorelaporanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'mahasiswa_id' => 'required|exists:users,id',
+            'judul_laporan' => 'required|string',
+            'laporan' => 'required|file|mimes:doc,pdf|max:10000',
         ];
     }
 }

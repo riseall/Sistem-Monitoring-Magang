@@ -11,7 +11,7 @@ class UpdatedosenRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdatedosenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nip' => 'sometimes|numeric',
+            'nama' => 'sometimes|string|max:255',
+            'telepon' => 'sometimes|string',
+            'alamat' => 'sometimes|string',
         ];
     }
 }

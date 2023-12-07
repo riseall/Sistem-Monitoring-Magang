@@ -156,11 +156,11 @@ const sendScreenshot_out = async (dataUrl: string) => {
 
         const formData = new FormData();
         formData.append('mahasiswa_id', user_id);
-        formData.append('foto', blob, 'png');
-        formData.append('hari', currentDay.value);
-        formData.append('tanggal', currentDate.value);
-        formData.append('waktu', currentTime.value);
-        formData.append('lokasi', location.value);
+        formData.append('foto_out', blob, 'png');
+        formData.append('hari_out', currentDay.value);
+        formData.append('tanggal_out', currentDate.value);
+        formData.append('waktu_out', currentTime.value);
+        formData.append('lokasi_out', location.value);
 
         // Kirim FormData ke server menggunakan Axios
         const response = await axios.post('api/absenKeluar', formData, {
@@ -180,7 +180,7 @@ const sendScreenshot_out = async (dataUrl: string) => {
             }
         });
         Toast.fire({
-            title: "Yeayy! Berhasil Absen Keluar",
+            title: "Yeayy! Berhasil Absen Masuk",
             icon: "success"
         });
         closeKeluar();

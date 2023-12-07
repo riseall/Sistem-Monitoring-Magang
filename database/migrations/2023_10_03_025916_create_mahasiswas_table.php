@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->string('foto')->nullable();
             $table->string('nama');
             $table->integer('nim');

@@ -91,6 +91,10 @@ Route::middleware('auth')->group(function () {
     Route::get('user.location', function () {
         return Inertia::render('User/Location');
     });
+
+    Route::name('user.mahasiswa')->get('/createMahasiswa', function () {
+        return Inertia::render('User/createMahasiswa');
+    });
 });
 
 Route::get('pegawai', function () {

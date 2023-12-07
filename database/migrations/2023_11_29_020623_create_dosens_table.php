@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('dosen', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->bigInteger('nip');
             $table->string('nama');
             $table->string('telepon');

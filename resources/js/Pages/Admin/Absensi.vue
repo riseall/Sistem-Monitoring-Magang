@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 
 interface AbsenItem {
     id: string;
+    mahasiswa_id: string;
     foto: string;
     hari: string;
     tanggal: string;
@@ -151,7 +152,8 @@ const deleteAbsMsk = (id: string) => {
         // Handle errors here
         console.error('Error making DELETE request:', error);
     }
-};
+    return pageNum;
+});
 
 //handle untuk menghapus data
 const deleteAbsKlr = (id: string) => {

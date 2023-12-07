@@ -22,6 +22,7 @@ class StoreAbsenKeluarRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'mahasiswa_id' => 'required|exists:users,id',
             'foto_out' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'hari_out' => 'required',
             'tanggal_out' => 'required',
