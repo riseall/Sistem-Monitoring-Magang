@@ -8,8 +8,8 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faBook, faBriefcase, faBuilding, faChevronRight, faClipboard, faHouseChimney, faUserTie, faUsers} from '@fortawesome/free-solid-svg-icons'
-library.add(faHouseChimney, faUsers, faChevronRight, faBuilding, faBriefcase, faClipboard, faBook, faUserTie)
+import { faBook, faBriefcase, faBuilding, faChevronLeft, faChevronRight, faClipboard, faHouseChimney, faUserTie, faUsers} from '@fortawesome/free-solid-svg-icons'
+library.add(faHouseChimney, faUsers, faChevronRight, faChevronLeft, faBuilding, faBriefcase, faClipboard, faBook, faUserTie)
 const appName = import.meta.env.VITE_APP_NAME || 'Internship Monitor';
 
 createInertiaApp({

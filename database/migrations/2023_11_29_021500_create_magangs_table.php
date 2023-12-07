@@ -13,11 +13,11 @@ return new class extends Migration {
         Schema::create('magang', function (Blueprint $table) {
             $table->id();
             $table->foreignId('mahasiswa_id')->constrained('mahasiswa')->cascadeOnDelete();
-            $table->foreignId('perusahaan_id')->constrained('perusahaan')->cascadeOnDelete();
+            $table->foreignId('perusahaan_id')->nullable()->constrained('perusahaan')->cascadeOnDelete();
             $table->string('periode');
             $table->string('posisi');
-            $table->foreignId('dosen_id')->constrained('dosen')->cascadeOnDelete();
-            $table->foreignId('laporan_id')->constrained('laporan')->cascadeOnDelete();
+            $table->foreignId('dosen_id')->nullable()->constrained('dosen')->cascadeOnDelete();
+            $table->foreignId('laporan_id')->nullable()->constrained('laporan')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -31,6 +31,19 @@ const totalKeluar = computed(() => {
     return 0;
 });
 
+/* Total user */
+const user = ref();
+axios.get('api/user')
+    .then(result => {
+        user.value = result.data.data
+    })
+const totalUser = computed(() => {
+    if (user.value) {
+        return user.value.length;
+    }
+    return 0;
+});
+
 /* Total Mahasiswa */
 const mahasiswa = ref();
 axios.get('api/mahasiswa')
@@ -40,6 +53,58 @@ axios.get('api/mahasiswa')
 const totalmhs = computed(() => {
     if (mahasiswa.value) {
         return mahasiswa.value.length;
+    }
+    return 0;
+});
+
+/* Total Dosen */
+const dosen = ref();
+axios.get('api/dosen')
+    .then(result => {
+        dosen.value = result.data.data
+    })
+const totalDsn = computed(() => {
+    if (dosen.value) {
+        return dosen.value.length;
+    }
+    return 0;
+});
+
+/* Total Perusahaan */
+const perusahaan = ref();
+axios.get('api/perusahaan')
+    .then(result => {
+        perusahaan.value = result.data.data
+    })
+const totalPrsh = computed(() => {
+    if (perusahaan.value) {
+        return perusahaan.value.length;
+    }
+    return 0;
+});
+
+/* Total Magang */
+const magang = ref();
+axios.get('api/magang')
+    .then(result => {
+        magang.value = result.data.data
+    })
+const totalMgng = computed(() => {
+    if (magang.value) {
+        return magang.value.length;
+    }
+    return 0;
+});
+
+/* Total Laporan */
+const laporan = ref();
+axios.get('api/laporan')
+    .then(result => {
+        laporan.value = result.data.data
+    })
+const totalLprn = computed(() => {
+    if (laporan.value) {
+        return laporan.value.length;
     }
     return 0;
 });
@@ -92,7 +157,7 @@ const totalmhs = computed(() => {
             <div id="card" class="card group">
                 <div class="flex items-center text-fuchsia-950 bg-fuchsia-500 justify-between p-4 pb-3">
                     <div>
-                        <p class="font-bold">{{ totalmhs }}</p>
+                        <p class="font-bold">{{ totalUser }}</p>
                         <p class="text-sm">User</p>
                     </div>
                     <FontAwesomeIcon icon="fa-solid fa-users"
@@ -125,7 +190,7 @@ const totalmhs = computed(() => {
             <div id="card" class="card group">
                 <div class="flex items-center text-lime-950 bg-lime-500 justify-between p-4 pb-3">
                     <div>
-                        <p class="font-bold">{{ totalmhs }}</p>
+                        <p class="font-bold">{{ totalDsn }}</p>
                         <p class="text-sm">Dosen</p>
                     </div>
                     <FontAwesomeIcon icon="fa-solid fa-user-tie"
@@ -139,7 +204,7 @@ const totalmhs = computed(() => {
             <div id="card" class="card group">
                 <div class="flex items-center text-amber-950 bg-amber-500 justify-between p-4 pb-3">
                     <div>
-                        <p class="font-bold">0</p>
+                        <p class="font-bold">{{ totalPrsh }}</p>
                         <p class="text-sm">Perusahaan</p>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -157,7 +222,7 @@ const totalmhs = computed(() => {
             <div id="card" class="card group">
                 <div class="flex items-center text-zinc-950 bg-zinc-500 justify-between p-4 pb-3">
                     <div>
-                        <p class="font-bold">0</p>
+                        <p class="font-bold">{{ totalMgng }}</p>
                         <p class="text-sm">Magang</p>
                     </div>
                     <FontAwesomeIcon icon="fa-solid fa-briefcase"
@@ -171,7 +236,7 @@ const totalmhs = computed(() => {
             <div id="card" class="card group">
                 <div class="flex items-center text-teal-950 bg-teal-500 justify-between p-4 pb-3">
                     <div>
-                        <p class="font-bold">0</p>
+                        <p class="font-bold">{{ totalLprn }}</p>
                         <p class="text-sm">Laporan</p>
                     </div>
                     <FontAwesomeIcon icon="fa-solid fa-book"
