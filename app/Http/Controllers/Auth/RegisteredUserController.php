@@ -13,14 +13,25 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-class RegisteredUserController extends Controller
-{
+class RegisteredUserController extends Controller {
+    public function index() {
+
+        $user = User::all();
+
+        return new JsonResponse(
+            [
+                'message' => 'Data User ditampilkan',
+                'data' => $user
+            ],
+            \Symfony\Component\HttpFoundation\Response::HTTP_OK
+        );
+    }
     /**
      * Display the registration view.
      */
-    public function create(): Response
-    {
+    public function create(): Response {
         return Inertia::render('Auth/Register');
     }
 
@@ -29,8 +40,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
+    public function store(Request $request): RedirectResponse {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
