@@ -7,17 +7,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMahasiswaRequest;
 use App\Http\Requests\UpdateMahasiswaRequest;
 use App\Models\Mahasiswa;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class MahasiswaController extends Controller
-{
+class MahasiswaController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $mahasiswa = Mahasiswa::all();
+    public function index(Request $request) {
+        $search = $request->get('keywords');
+        $mahasiswa = Mahasiswa::where('nama', 'like', '%'.$search.'%')
+            ->orWhere('nim', 'like', '%'.$search.'%')
+            ->orWhere('kelas', 'like', '%'.$search.'%')
+            ->get();
         return new JsonResponse(
             [
                 'message' => 'Data Mahasiswa',
@@ -30,8 +33,7 @@ class MahasiswaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMahasiswaRequest $request)
-    {
+    public function store(StoreMahasiswaRequest $request) {
 
         $validateData = $request->validated();
         $createdMahasiswa = Mahasiswa::query()->create($validateData);
@@ -40,7 +42,7 @@ class MahasiswaController extends Controller
         $fileNama = null;
 
         //Unggah foto dan simpan referensi
-        if ($request->hasFile('foto')) {
+        if($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
             $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
@@ -49,7 +51,7 @@ class MahasiswaController extends Controller
         }
 
         //Simpan referensi foto pada database
-        $createdMahasiswa->update(['foto' => 'foto_mahasiswa/' . $fileNama]);
+        $createdMahasiswa->update(['foto' => 'foto_mahasiswa/'.$fileNama]);
 
         return response()->json([
             'message' => 'Berhasil Menambahkan Mahasiswa',
@@ -60,11 +62,10 @@ class MahasiswaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
+    public function show(string $id) {
 
         $mahasiswa = Mahasiswa::query()->find($id);
-        if (empty($mahasiswa)) {
+        if(empty($mahasiswa)) {
             throw new MyModelNotFoundException('mahasiswa');
         }
 
@@ -77,15 +78,14 @@ class MahasiswaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMahasiswaRequest $request, string $id)
-    {
+    public function update(UpdateMahasiswaRequest $request, string $id) {
         $mahasiswa = Mahasiswa::query()->find($id);
 
         // Inisialisasi variabel $fileNama
         $fileNama = null;
 
         //Unggah foto dan simpan referensi
-        if ($request->hasFile('foto')) {
+        if($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
             $path = $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
@@ -94,9 +94,9 @@ class MahasiswaController extends Controller
         }
 
         //Simpan referensi foto pada database
-        $mahasiswa->update(['foto' => 'foto_mahasiswa/' . $fileNama]);
+        $mahasiswa->update(['foto' => 'foto_mahasiswa/'.$fileNama]);
 
-        if (empty($mahasiswa)) {
+        if(empty($mahasiswa)) {
             throw new MyModelNotFoundException('mahasiswa');
         }
         $input = $request->safe()->all();
@@ -111,10 +111,9 @@ class MahasiswaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
         $mahasiswa = Mahasiswa::query()->find($id);
-        if (empty($mahasiswa)) {
+        if(empty($mahasiswa)) {
             throw new MyModelNotFoundException('mahasiswa');
         }
 
