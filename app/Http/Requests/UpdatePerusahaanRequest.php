@@ -23,7 +23,7 @@ class UpdatePerusahaanRequest extends FormRequest
     {
         return [
             'nama' => 'sometimes|string|max:255',
-            'alamat' => 'sometimes|string',
+            'email' => 'sometimes|string',
             'alamat' => 'sometimes|string',
         ];
     }

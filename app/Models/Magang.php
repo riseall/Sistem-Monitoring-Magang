@@ -19,15 +19,7 @@ class Magang extends Model
     ];
 
     protected $fillable = [
-        'nama_mahasiswa',
-        'nim',
-        'kelas',
-        'nama_perusahaan',
-        'tanggal_magang',
-        'judul_laporan',
-        'dosen_pembimbing',
-        'telepon_perusahaan',
-        'alamat_perusahaan',
-        'keterangan',
+        'periode',
+        'posisi',
     ];
 }

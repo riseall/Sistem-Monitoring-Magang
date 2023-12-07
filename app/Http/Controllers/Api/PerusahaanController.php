@@ -9,7 +9,6 @@ use App\Http\Requests\UpdatePerusahaanRequest;
 use App\Models\Perusahaan;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Storage;
 
 class PerusahaanController extends Controller
 {

@@ -76,13 +76,8 @@ const postData = async (event: Event) => {
     form.append('nama', formData.value.nama);
     form.append('email', formData.value.email);
     form.append('alamat', formData.value.alamat);
-
     try {
-        const response = await axios.post('api/perusahaan', form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post('api/perusahaan', form);
         // response sukses
         console.log('Berhasil Menambahkan Data', response.data);
         alert(response.data.message);
@@ -96,27 +91,31 @@ const postData = async (event: Event) => {
 
 // Function to handle updating perusahaan data
 const updateData = async () => {
-    const form = new FormData();
-    form.append('nama', formData.value.nama);
-    form.append('email', formData.value.email)
-    form.append('alamat', formData.value.alamat);
+ const data = {
+   nama: formData.value.nama,
+   email: formData.value.email,
+   alamat: formData.value.alamat
+ };
 
-    try{
-        const response = await axios.post(`api/perusahaan/${formData.value.id}`, form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-    });
+ try {
+     const response = await axios({
+         method: 'put',
+         url: `api/perusahaan/${formData.value.id}`,
+         data: data,
+         headers: {
+             'Content-Type': 'application/json',
+         },
+     });
 
-    // Handle the update response
-    console.log('Berhasil Memperbarui Data', response.data);
-    alert(response.data.message);
-    isEdit.value = false;
-    getPrs
-    // You may also need to update the `` list if you're maintaining a list of students
-    } catch (error) {
-        console.error('Update gagal:', error);
-    }
+     // Handle the update response
+     console.log('Berhasil Memperbarui Data', response.data);
+     alert(response.data.message);
+     isEdit.value = false;
+     getPrs();
+
+ } catch (error) {
+     console.error('Update gagal:', error);
+ }
 };
 
 const isConfirmDialog = ref(false);
@@ -124,11 +123,11 @@ isConfirmDialog.value = false;
 
 const deleteUser = async (id: string) => {
     try {
-        const response = await axios.delete(`api/perusahaan/${id}`);
+        const response = await axios.delete(`api/perusahaan/${id}`)
+        .then(res => {
+            getPrs();
+        });
 
-        // Handle the response here if needed
-        console.log(response.data.message);
-        alert(response.data.message);
     } catch (error) {
         // Handle errors here
         console.error('Error making DELETE request:', error);
@@ -136,7 +135,7 @@ const deleteUser = async (id: string) => {
 };
 
 onMounted(() => {
-    getPrs
+    getPrs();
 });
 
 </script>

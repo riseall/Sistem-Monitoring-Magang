@@ -72,10 +72,6 @@ Route::get('perusahaan', function () {
 Route::get('magang', function () {
     return Inertia::render('Admin/Magang');
 });
-
-Route::get('magang', function () {
-    return Inertia::render('Admin/Magang');
-});
 Route::get('absensi', function () {
     return Inertia::render('Admin/Absensi');
 });
