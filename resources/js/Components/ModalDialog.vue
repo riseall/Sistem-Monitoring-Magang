@@ -8,10 +8,6 @@ import {
 
 const { isOpen } = defineProps(['isOpen']);
 const emit = defineEmits(['close']);
-
-const closeModal = () => {
-    emit('close');
-};
 </script>
 <template>
     <TransitionRoot appear :show="isOpen" as="template">
