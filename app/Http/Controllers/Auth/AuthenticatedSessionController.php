@@ -37,6 +37,8 @@ class AuthenticatedSessionController extends Controller
         // Check the role of the authenticated user and redirect them
         if (Auth::user()->role == 'admin') {
             return redirect()->intended('dashboard');
+        } else if (Auth::user()->role == 'dosen') {
+            return redirect()->intended('dashboard');
         } else {
             return redirect()->intended('user.dashboard');
         }
