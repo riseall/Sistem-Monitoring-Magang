@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePerusahaanRequest;
 use App\Http\Requests\UpdatePerusahaanRequest;
 use App\Models\Perusahaan;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,9 +17,13 @@ class PerusahaanController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        $perusahaan = Perusahaan::all();
+        $search = $request->get('keywords');
+        $perusahaan = Perusahaan::where('nama', 'like', '%'.$search.'%')
+            ->orWhere('email', 'like', '%'.$search.'%')
+            ->orWhere('alamat', 'like', '%'.$search.'%')
+            ->get();
         return new JsonResponse(
             [
                 'message' => 'Data Perusahaan',

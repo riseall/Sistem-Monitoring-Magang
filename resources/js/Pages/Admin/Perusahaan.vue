@@ -2,23 +2,27 @@
 import Sidebar from '@/Components/Sidebar.vue';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
-import { Ref, ref } from 'vue';
+import { Ref, computed, ref, watch } from 'vue';
 import BlueButton from '@/Components/UI/BlueButton.vue';
 import RedButton from '@/Components/UI/RedButton.vue';
-import ConfirmDialog from '@/Components/UI/ConfirmDialog.vue';
 import ModalDialog from '@/Components/ModalDialog.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import BtnTutup from '@/Components/UI/BtnTutup.vue';
 import BtnEdit from '@/Components/UI/BtnEdit.vue';
 import BtnDelete from '@/Components/UI/BtnDelete.vue';
-import { fromUnixTime } from 'date-fns';
 import { onMounted } from 'vue';
+import { AxiosError } from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Swal from 'sweetalert2';
 
 const isOpen = ref(false)
 const isEdit = ref(false)
 
 const closeModal = () => (isOpen.value = false)
-const openModal = () => (isOpen.value = true)
+const openModal = () => {
+    isOpen.value = true
+    errors.value = '';
+}
 const editOpen = (id: string) => {
     isEdit.value = true
     const selectedPerusahaan = perusahaan.value.find((item) => {
@@ -40,6 +44,10 @@ const editClose = () => {
     }
 }
 
+const errors = ref();
+const itemsPerPage = 5;
+const currentPage = ref(1);
+
 type Response = {
     message: string,
     data: Perusahaan[]
@@ -53,15 +61,56 @@ type Perusahaan = {
 }
 
 const perusahaan = ref<Perusahaan[]>([]);
-
-const getPrs= async () => {
-    await axios.get<Response>('api/perusahaan')
+//get data perusahaan
+const getPrs = async () => {
+    await axios.get<Response>('api/perusahaan', { params: { keywords: keywords.value } })
         .then(result => {
             console.log(result)
             perusahaan.value = result.data.data
         });
-    }
+}
+const totalItems = computed(() => perusahaan.value.length);
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
 
+const displayedItems = computed(() => {
+    const startIndex = (currentPage.value - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return perusahaan.value.slice(startIndex, endIndex);
+});
+
+const visPageNum = computed(() => {
+    let pageNum = []
+    if (totalPages.value <= 7) {
+        for (let i = 1; i <= totalPages.value; i++) {
+            pageNum.push(i);
+        }
+    } else {
+        if (currentPage.value <= 4) {
+            pageNum = [1, 2, 3, 4, 5, '....', totalPages.value];
+        } else if (currentPage.value >= totalPages.value - 3) {
+            pageNum = [1, '....', totalPages.value - 4, totalPages.value - 3, totalPages.value - 2, totalPages.value - 1, totalPages.value]
+        } else {
+            pageNum = [1, '....', currentPage.value, currentPage.value + 1, '....', totalPages.value]
+        }
+    }
+    return pageNum;
+});
+
+const changePage = (page: number) => {
+    if (page >= 1 && page <= totalPages.value) {
+        currentPage.value = page
+    }
+}
+
+//handle search item
+const keywords = ref(null);
+const results = ref<Perusahaan[]>([]);
+
+watch(keywords, () => {
+    getPrs();
+})
+
+//Handle untuk manambahkan data
 const formData: Ref<Perusahaan> = ref({
     id: '',
     nama: '',
@@ -80,11 +129,25 @@ const postData = async (event: Event) => {
         const response = await axios.post('api/perusahaan', form);
         // response sukses
         console.log('Berhasil Menambahkan Data', response.data);
-        alert(response.data.message);
+        Swal.fire({
+            title: "Yeayy!",
+            text: "Berhasil Menambahkan Data.",
+            icon: "success"
+        })
         isOpen.value = false;
+        formData.value = {
+            id: '',
+            nama: '',
+            email: '',
+            alamat: ''
+        }
         getPrs()
-    } catch (error) {
+    } catch (error: unknown) {
         // response error
+        // response error
+        if (error instanceof AxiosError) {
+            errors.value = error.response?.data.errors;
+        }
         console.error('Post gagal:', error);
     }
 }
@@ -105,10 +168,16 @@ const updateData = async () => {
          headers: {
              'Content-Type': 'application/json',
          },
+         
      });
 
      // Handle the update response
      console.log('Berhasil Memperbarui Data', response.data);
+     Swal.fire({
+            title: "Yeayy!",
+            text: "Berhasil Memperbarui Data.",
+            icon: "success"
+        });
      alert(response.data.message);
      isEdit.value = false;
      getPrs();
@@ -121,19 +190,33 @@ const updateData = async () => {
 const isConfirmDialog = ref(false);
 isConfirmDialog.value = false;
 
-const deleteUser = async (id: string) => {
+//handle untuk menghapus data
+const deleteUser = (id: string) => {
     try {
-        const response = await axios.delete(`api/perusahaan/${id}`)
-        .then(res => {
-            getPrs();
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Anda tidak akan dapat mengembalikan ini!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const response = axios.delete(`api/perusahaan/${id}`);
+                getPrs();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+            }
         });
-
     } catch (error) {
         // Handle errors here
         console.error('Error making DELETE request:', error);
     }
 };
-
 onMounted(() => {
     getPrs();
 });
@@ -144,8 +227,14 @@ onMounted(() => {
 
     <Sidebar>
         <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
-            <div class="flex justify-between mb-4 items-start-start">
-                <h3 class="text-xl font-bold text-left">Data Perusahaan</h3>
+            <h3 class="text-lg font-semibold text-left">Data Perusahaan</h3>
+            <div class="flex justify-between mb-4 mt-3 items-start-start">
+                <div>
+                    <input type="text" class="rounded-lg text-xs p-[0.3 rem]" v-model="keywords" placeholder="Search">
+                    <ul v-if="results.length > 0">
+                        <li v-for="result in results" :key="result.id" v-text="result.nama, result.email, result.alamat"></li>
+                    </ul>
+                </div>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>
             </div>
             <div class="container overflow-x-auto rounded-lg">
@@ -161,8 +250,8 @@ onMounted(() => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <tr class="even:bg-gray-50" v-for="(Item, index) in perusahaan" :key="Item.id">
-                            <td class="td-items">{{ index + 1 }}</td>
+                        <tr class="odd:bg-gray-50" v-for="(Item, index) in displayedItems" :key="Item.id">
+                            <td class="td-items">{{ (currentPage - 1) * itemsPerPage + index + 1 }}.</td>
                             <td class="td-items">{{ Item.nama }}</td>
                             <td class="td-items">{{ Item.email }}</td>
                             <td class="td-items">{{ Item.alamat }}</td>
@@ -175,6 +264,32 @@ onMounted(() => {
                         </tr>
                     </tbody>
                 </table>
+                <div class="py-2">
+                    <nav class="block">
+                        <p class="text-xs text-gray-700 font-semibold">Jumlah Data : {{ totalItems }}</p>
+                        <ul class="flex pl-0 rounded list-none flex-wrap justify-center">
+                            <li>
+                                <a href="#" @click="changePage(currentPage - 1)" :disabled="(currentPage === 1)"
+                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
+                                    <FontAwesomeIcon icon="fas fa-chevron-left -ml-px" />
+                                </a>
+                            </li>
+                            <li v-for="Items in visPageNum" :key="Items"
+                                :class="{ active: currentPage == Items || Items === '....' }">
+                                <a href="#" @click="changePage(Number(Items))"
+                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 text-sky-400 focus:text-white focus:bg-sky-300 hover:bg-sky-300 hover:text-white">
+                                    {{ Items }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" @click="changePage(currentPage + 1)" :disabled="(currentPage === 1)"
+                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
+                                    <FontAwesomeIcon icon="fas fa-chevron-right -ml-px" />
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
                 <!-- End Table Perusahaan -->
             </div>
         </div>
@@ -192,6 +307,7 @@ onMounted(() => {
                             <template v-slot:title>Nama Perusahaan</template>
                             <template v-slot:input>
                                 <input type="text" v-model="formData.nama" placeholder="Nama" class="input-form" />
+                                <div class="text-red-400 text-sm" v-if="errors?.nama">{{ errors.nama[0] }}</div>
                             </template>
                         </InputForm>
 
@@ -200,6 +316,7 @@ onMounted(() => {
                             <template v-slot:input>
                                 <input type="email" v-model="formData.email" placeholder="Email"
                                     class="peer invalid:ring-pink-600 input-form" />
+                                <div class="text-red-400 text-sm" v-if="errors?.email">{{ errors.email[0] }}</div>
                                 <p class="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
                                     Masukkan alamat email yang valid.
                                 </p>
@@ -218,6 +335,7 @@ onMounted(() => {
                                 </label>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
                                     class="input-form"></textarea>
+                                <div class="text-red-400 text-sm" v-if="errors?.alamat">{{ errors.alamat[0] }}</div>
                             </div>
                         </div>
                     </div>
@@ -285,14 +403,5 @@ onMounted(() => {
             </div>
         </ModalDialog>
         <!-- End Dialog Edit Data -->
-
-        <ConfirmDialog v-if="isConfirmDialog">
-            <template v-slot:title>Konfirmasi</template>
-            <template v-slot:message>Apakah anda yakin akan menghapus data?</template>
-            <template v-slot:button>
-                <RedButton class="mx-1 mr-2">Ya</RedButton>
-                <BlueButton>Batal</BlueButton>
-            </template>
-        </ConfirmDialog>
     </Sidebar>
 </template>
