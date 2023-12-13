@@ -11,7 +11,7 @@ class UpdatelaporanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdatelaporanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'mahasiswa_id' => 'sometimes',
+            'judul_laporan' => 'sometimes|string',
+            'laporan' => 'sometimes|file',
         ];
     }
 }

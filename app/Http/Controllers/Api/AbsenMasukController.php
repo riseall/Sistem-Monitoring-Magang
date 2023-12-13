@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAbsenMasukRequest;
 use App\Http\Requests\UpdateAbsenMasukRequest;
 use App\Models\AbsenMasuk;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,9 +16,17 @@ class AbsenMasukController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $absenmasuk = AbsenMasuk::all();
+        $search = $request->get('key');
+        $absenmasuk = AbsenMasuk::where('hari', 'like', '%' . $search . '%')
+            ->orWhere('tanggal', 'like', '%' . $search . '%')
+            ->orWhere('waktu', 'like', '%' . $search . '%')
+            ->orWhere('lokasi', 'like', '%' . $search . '%')
+            ->with(['mahasiswa' => function ($query) use ($search) {
+                $query->where('nama', 'like', '%' . $search . '%');
+            }])
+            ->get();
 
         return new JsonResponse(
             [
@@ -41,6 +51,10 @@ class AbsenMasukController extends Controller
     public function store(StoreAbsenMasukRequest $request)
     {
         $validate = $request->validated();
+        // Mendapatkan user yang sedang login
+        // $user = Auth::user();
+        // Menambahkan user_id ke data yang akan disimpan
+        $validate['mahasiswa_id'] = $request->get('mahasiswa_id');
         $createdAbsen = AbsenMasuk::query()->create($validate);
 
         if ($request->hasFile('foto')) {
