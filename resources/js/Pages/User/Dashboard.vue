@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale'; // Mengimpor bahasa Indonesia
 import NavbarBottom from '@/Components/User/NavbarBottom.vue';
@@ -9,6 +9,8 @@ import ModalDialog from '@/Components/ModalDialog.vue';
 import BtnTutup from '@/Components/UI/BtnTutup.vue';
 import AmberBtnVue from '@/Components/User/AmberBtn.vue';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Swal from 'sweetalert2'
 
 //Logic DateTime
 const currentDay = ref('');
@@ -105,12 +107,15 @@ const takeScreenshot_out = () => {
     }
 };
 
+let user_id = usePage().props.auth.user.id.toString();
+
 const sendScreenshot = async (dataUrl: string) => {
     try {
         // Ubah data URL menjadi blob
         const blob = await fetch(dataUrl).then((res) => res.blob());
 
         const formData = new FormData();
+        formData.append('mahasiswa_id', user_id);
         formData.append('foto', blob, 'png');
         formData.append('hari', currentDay.value);
         formData.append('tanggal', currentDate.value);
@@ -123,8 +128,22 @@ const sendScreenshot = async (dataUrl: string) => {
                 'Content-Type': 'multipart/form-data',
             },
         });
-
-        console.log('Screenshot uploaded:', response.data);
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            title: "Yeayy! Berhasil Absen Masuk",
+            icon: "success"
+        });
+        closeMasuk();
     } catch (error) {
         console.error('Error uploading screenshot:', error);
     }
@@ -136,6 +155,7 @@ const sendScreenshot_out = async (dataUrl: string) => {
         const blob = await fetch(dataUrl).then((res) => res.blob());
 
         const formData = new FormData();
+        formData.append('mahasiswa_id', user_id);
         formData.append('foto_out', blob, 'png');
         formData.append('hari_out', currentDay.value);
         formData.append('tanggal_out', currentDate.value);
@@ -148,8 +168,22 @@ const sendScreenshot_out = async (dataUrl: string) => {
                 'Content-Type': 'multipart/form-data',
             },
         });
-
-        console.log('Screenshot uploaded:', response.data);
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            title: "Yeayy! Berhasil Absen Masuk",
+            icon: "success"
+        });
+        closeKeluar();
     } catch (error) {
         console.error('Error uploading screenshot:', error);
     }
@@ -172,10 +206,10 @@ onMounted(() => {
                     <h1>Halo!!</h1>
                     <span class="text-xl font-bold">{{ $page.props.auth.user.name }}</span>
                 </div>
-                <span class="text-sm">{{ currentTime }}</span>
+                <span class="text-">{{ currentTime }}</span>
             </div>
             <div
-                class=" flex items-center justify-between rounded-lg mt-4 p-4 px-6 bg-gradient-to-br from-amber-500 to-amber-200">
+                class=" flex items-center justify-between rounded-lg mt-4 p-4 px-6 bg-gradient-to-br from-amber-500 to-amber-200 ">
                 <div class="text-gray-900">
                     <h1 class="font-semibold">{{ currentDay }}</h1>
                     <span class="text-sm">{{ currentDate }}</span>
@@ -195,11 +229,7 @@ onMounted(() => {
             <div class="grid gap-5 relative lg:grid-cols-2 md:grid-cols-1">
                 <div class="bg-white rounded-md shadow-lg flex p-4 py-5 border border-gray-300">
                     <div class="p-2 rounded-md mr-5 bg-green-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
-                            stroke="currentColor" class="w-6 h-6 text-green-700">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-                        </svg>
+                        <FontAwesomeIcon icon="fa-solid fa-arrow-right-to-bracket" class="mr-1 text-lg text-green-700" />
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Masuk</h1>
@@ -208,11 +238,7 @@ onMounted(() => {
                 </div>
                 <div class="bg-white rounded-md shadow-lg flex p-4 py-5 border border-gray-300">
                     <div class="p-2 rounded-md mr-5 bg-rose-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
-                            stroke="currentColor" class="w-6 h-6 text-rose-700">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                        </svg>
+                        <FontAwesomeIcon icon="fa-solid fa-arrow-right-from-bracket" class="ml-1 text-lg text-red-700" />
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Keluar</h1>
@@ -237,13 +263,7 @@ onMounted(() => {
             </template>
             <video ref="video" class="mt-3 rounded-lg w-full"></video>
             <AmberBtnVue @click="takeScreenshot" class="mt-3 space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                </svg>
+                <FontAwesomeIcon icon="fa-solid fa-camera-retro" class="mr-1 text-lg" />
                 <span>Ambil</span>
             </AmberBtnVue>
         </ModalDialog>
@@ -255,13 +275,7 @@ onMounted(() => {
             </template>
             <video ref="video" class="mt-3 rounded-lg"></video>
             <AmberBtnVue @click="takeScreenshot_out" class="mt-3 space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                </svg>
+                <FontAwesomeIcon icon="fa-solid fa-camera-retro" class="mr-1 text-lg" />
                 <span>Ambil</span>
             </AmberBtnVue>
         </ModalDialog>
