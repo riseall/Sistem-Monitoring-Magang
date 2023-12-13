@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAbsenKeluarRequest;
 use App\Http\Requests\UpdateAbsenKeluarRequest;
 use App\Models\AbsenKeluar;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,9 +15,17 @@ class AbsenKeluarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $absenkeluar = AbsenKeluar::all();
+        $search = $request->get('keywords');
+        $absenkeluar = AbsenKeluar::where('hari_out', 'like', '%' . $search . '%')
+            ->orWhere('tanggal_out', 'like', '%' . $search . '%')
+            ->orWhere('waktu_out', 'like', '%' . $search . '%')
+            ->orWhere('lokasi_out', 'like', '%' . $search . '%')
+            ->with(['mahasiswa' => function ($query) use ($search) {
+                $query->where('nama', 'like', '%' . $search . '%');
+            }])
+            ->get();
 
         return new JsonResponse(
             [
@@ -41,6 +50,7 @@ class AbsenKeluarController extends Controller
     public function store(StoreAbsenKeluarRequest $request)
     {
         $validate = $request->validated();
+        $validate['mahasiswa_id'] = $request->get('mahasiswa_id');
         $createdAbsen = AbsenKeluar::query()->create($validate);
 
         if ($request->hasFile('foto_out')) {

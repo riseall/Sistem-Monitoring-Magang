@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('laporan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mahasiswa_id')->constrained('mahasiswa')->cascadeOnDelete();
+            $table->foreignId('mahasiswa_id')->constrained('mahasiswa')->cascadeOnUpdate();
             $table->string('judul_laporan');
             $table->string('laporan');
             $table->timestamps();

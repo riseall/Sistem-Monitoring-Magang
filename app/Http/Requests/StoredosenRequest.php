@@ -11,7 +11,7 @@ class StoredosenRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoredosenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nip' => 'required',
+            'nama' => 'required|string|max:255',
+            'telepon' => 'required',
+            'alamat' => 'required',
         ];
     }
 }

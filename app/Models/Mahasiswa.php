@@ -22,6 +22,7 @@ class Mahasiswa extends Model
     ];
 
     protected $fillable = [
+        'user_id',
         'foto',
         'nama',
         'nim',
@@ -49,5 +50,10 @@ class Mahasiswa extends Model
     public function magang(): HasMany
     {
         return $this->hasMany(magang::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

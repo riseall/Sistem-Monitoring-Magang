@@ -11,7 +11,7 @@ class AbsenMasuk extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = "absen_masuk";
+    protected $table = 'absen_masuk';
 
     protected $hidden = [
         'created_at',
@@ -19,16 +19,16 @@ class AbsenMasuk extends Model
         'deleted_at',
     ];
     protected $fillable = [
-        "mahasiswa_id",
-        "foto",
-        "hari",
-        "tanggal",
-        "waktu",
-        "lokasi",
+        'mahasiswa_id',
+        'foto',
+        'hari',
+        'tanggal',
+        'waktu',
+        'lokasi',
     ];
 
     public function mahasiswa(): BelongsTo
     {
-        return $this->belongsTo(Mahasiswa::class);
+        return $this->belongsTo(Mahasiswa::class, 'mahasiswa_id');
     }
 }
