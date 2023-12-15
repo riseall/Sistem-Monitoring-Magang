@@ -8,6 +8,7 @@ use App\Http\Requests\StoreMahasiswaRequest;
 use App\Http\Requests\UpdateMahasiswaRequest;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -49,7 +50,7 @@ class MahasiswaController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
-            $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
+            $foto->move(public_path('foto_mahasiswa'), $fileNama);
         } else {
             $fileNama = 'pas_foto_kosong.png';
         }
@@ -94,9 +95,9 @@ class MahasiswaController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
-            $path = $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
+            $foto->move(public_path('foto_mahasiswa'), $fileNama);
         } else {
-            $path = $mahasiswa->foto;
+            $mahasiswa->foto;
         }
 
         //Simpan referensi foto pada database
@@ -105,9 +106,7 @@ class MahasiswaController extends Controller
         if (empty($mahasiswa)) {
             throw new MyModelNotFoundException('mahasiswa');
         }
-        $input = $request->safe()->all();
-        $input['foto'] = $path;
-        $mahasiswa->update($input);
+
         return response()->json([
             'message' => 'Data Mahasiswa berhasil diupdate',
             'data' => $mahasiswa
@@ -122,6 +121,14 @@ class MahasiswaController extends Controller
         $mahasiswa = Mahasiswa::query()->find($id);
         if (empty($mahasiswa)) {
             throw new MyModelNotFoundException('mahasiswa');
+        }
+
+        // Hapus file foto jika ada
+        if (!empty($mahasiswa->foto)) {
+            $filePath = public_path($mahasiswa->foto);
+            if (File::exists($filePath)) {
+                File::delete($filePath);
+            }
         }
 
         $mahasiswa->delete();

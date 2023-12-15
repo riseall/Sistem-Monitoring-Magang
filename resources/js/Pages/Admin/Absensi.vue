@@ -5,10 +5,10 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import BtnDelete from '@/Components/UI/BtnDelete.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Swal from 'sweetalert2';
 
 interface AbsenItem {
     id: string;
-    mahasiswa_id: string;
     foto: string;
     hari: string;
     tanggal: string;
@@ -131,6 +131,62 @@ watch(keywords, () => {
     getAbKlr();
 })
 
+//handle untuk menghapus data
+const deleteAbsMsk = (id: string) => {
+    try {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Anda tidak akan dapat mengembalikan ini!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`api/absenMasuk/${id}`);
+                getAbMsk();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+            }
+        });
+    } catch (error) {
+        // Handle errors here
+        console.error('Error making DELETE request:', error);
+    }
+};
+
+//handle untuk menghapus data
+const deleteAbsKlr = (id: string) => {
+    try {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Anda tidak akan dapat mengembalikan ini!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`api/absenKeluar/${id}`);
+                getAbKlr();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+            }
+        });
+    } catch (error) {
+        // Handle errors here
+        console.error('Error making DELETE request:', error);
+    }
+};
+
 onMounted(() => {
     getAbMsk();
     getAbKlr();
@@ -183,7 +239,7 @@ onMounted(() => {
                                 </a>
                             </td>
                             <td class="td-items">
-                                <BtnDelete />
+                                <BtnDelete @click="deleteAbsMsk(Item.id)" />
                             </td>
                         </tr>
                     </tbody>
@@ -259,12 +315,12 @@ onMounted(() => {
                             <td class="td-items">{{ Item.waktu_out }}</td>
                             <td class="td-items">
                                 <a :href="Item.lokasi_out" target="_blank" class="flex text-sky-400 hover:text-sky-500">
-                                    <FontAwesomeIcon icon="fa-solid fa-map-location-dot" />
+                                    <FontAwesomeIcon icon="fa-solid fa-map-location-dot" class="mr-1 text-lg" />
                                     Lokasi
                                 </a>
                             </td>
                             <td class="td-items">
-                                <BtnDelete />
+                                <BtnDelete @click="deleteAbsKlr(Item.id)" />
                             </td>
                         </tr>
                     </tbody>
