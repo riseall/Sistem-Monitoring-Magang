@@ -50,7 +50,7 @@ class MahasiswaController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
-            $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
+            $foto->move(public_path('foto_mahasiswa'), $fileNama);
         } else {
             $fileNama = 'pas_foto_kosong.png';
         }
@@ -95,9 +95,9 @@ class MahasiswaController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fileNama = $foto->getClientOriginalName();
-            $path = $foto->storePubliclyAs('foto_mahasiswa', $fileNama);
+            $foto->move(public_path('foto_mahasiswa'), $fileNama);
         } else {
-            $path = $mahasiswa->foto;
+            $mahasiswa->foto;
         }
 
         //Simpan referensi foto pada database
@@ -106,9 +106,7 @@ class MahasiswaController extends Controller
         if (empty($mahasiswa)) {
             throw new MyModelNotFoundException('mahasiswa');
         }
-        $input = $request->safe()->all();
-        $input['foto'] = $path;
-        $mahasiswa->update($input);
+
         return response()->json([
             'message' => 'Data Mahasiswa berhasil diupdate',
             'data' => $mahasiswa

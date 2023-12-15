@@ -223,6 +223,16 @@ const updateData = async () => {
             icon: "success"
         });
         isEdit.value = false;
+        formData.value = {
+            id: '',
+            foto: '',
+            nama: '',
+            nim: '',
+            kelas: '',
+            telepon: '',
+            email: '',
+            alamat: ''
+        }
         selectedFile = null;
         getMhs();
         // You may also need to update the `mahasiswa` list if you're maintaining a list of students
@@ -412,7 +422,7 @@ onMounted(() => {
                     <div class="flex flex-wrap mt-5">
                         <div class="w-full lg:w-12/12 px-4">
                             <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                <label class="block text-blueGray-600 text-xs font-bold mb-2">
                                     Foto
                                 </label>
                                 <input type="file" ref="fileInput" @change="handleFileChange"
@@ -427,7 +437,7 @@ onMounted(() => {
                         <div class="w-full lg:w-12/12 px-4">
                             <div class="relative w-full mb-3">
                                 <label
-                                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
+                                    class="block text-blueGray-600 text-xs font-bold mb-2 after:content-['*'] after:ml-0.5 after:text-red-500">
                                     Alamat
                                 </label>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
@@ -438,7 +448,7 @@ onMounted(() => {
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">
-                            <BlueButton @click="postData, closeModal" type="submit" class="mr-2">Simpan</BlueButton>
+                            <BlueButton @click="postData" type="submit" class="mr-2">Simpan</BlueButton>
                             <RedButton @click="closeModal">Batal</RedButton>
                         </div>
                     </div>
@@ -502,8 +512,7 @@ onMounted(() => {
                     <div class="flex flex-wrap mt-5">
                         <div class="w-full lg:w-12/12 px-4">
                             <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
+                                <label class="block text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                                     Foto
                                 </label>
                                 <input type="file" ref="fileInput" @change="handleFileChange"
@@ -517,8 +526,7 @@ onMounted(() => {
                     <div class="flex flex-wrap mt-5">
                         <div class="w-full lg:w-12/12 px-4">
                             <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
+                                <label class="block text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                                     Alamat
                                 </label>
                                 <textarea type="text" v-model="formData.alamat" placeholder="Alamat"
