@@ -66,6 +66,7 @@ const post = async (event: Event) => {
 }
 </script>
 <template>
+
     <Head title="Laporan" />
     <div class="h-screen font-montserrat bg-zinc-100">
         <header class="h-14 p-2 flex flex-col justify-end bg-white shadow-lg">
@@ -111,6 +112,3 @@ const post = async (event: Event) => {
         </div>
     </div>
 </template>
-   
-
-   

@@ -24,7 +24,7 @@ class StorelaporanRequest extends FormRequest
         return [
             'mahasiswa_id' => 'required|exists:users,id',
             'judul_laporan' => 'required|string',
-            'laporan' => 'required|file|mimes:doc,pdf|max:10000',
+            'laporan' => 'required|file|mimes:pdf|max:10000',
         ];
     }
 }

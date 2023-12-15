@@ -30,6 +30,11 @@ return [
 
     'disks' => [
 
+        'data_laporan' => [
+            'driver' => 'local',
+            'root' => public_path('data_laporan'),
+        ],
+
         'foto_absen' => [
             'driver' => 'local',
             'root' => public_path('foto_absen'),
