@@ -88,8 +88,28 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('User/Profile');
     });
 
+    Route::get('user.keamanan', function () {
+        return Inertia::render('User/Keamanan');
+    });
+
     Route::get('user.location', function () {
         return Inertia::render('User/Location');
+    });
+
+    Route::get('user.setting', function () {
+        return Inertia::render('User/Setting');
+    });
+
+    Route::get('user.perusahaan', function () {
+        return Inertia::render('User/Perusahaan');
+    });
+
+    Route::get('user.magang', function () {
+        return Inertia::render('User/Magang');
+    });
+
+    Route::get('user.laporan', function () {
+        return Inertia::render('User/Laporan');
     });
 
     Route::name('user.mahasiswa')->get('/createMahasiswa', function () {

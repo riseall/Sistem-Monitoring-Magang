@@ -39,6 +39,5 @@ Route::apiResource('perusahaan', PerusahaanController::class);
 Route::apiResource('magang', MagangController::class);
 Route::apiResource('laporan', LaporanController::class);
 
-
-Route::get('masukUser/{id}', [HistoryController::class, 'masuk']);
-Route::get('keluarUser', [HistoryController::class, 'keluar']);
+Route::middleware('auth:api')->get('masukk', [HistoryController::class, 'masuk']);
+Route::middleware('auth:api')->get('keluarr', [HistoryController::class, 'keluar']);

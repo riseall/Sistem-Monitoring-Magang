@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\MyModelNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAbsenMasukRequest;
 use App\Http\Requests\UpdateAbsenMasukRequest;
@@ -98,8 +99,17 @@ class AbsenMasukController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AbsenMasuk $absenMasuk)
+    public function destroy(string $id)
     {
-        //
+        $absenMasuk = AbsenMasuk::query()->find($id);
+        if (empty($absenMasuk)) {
+            throw new MyModelNotFoundException('mahasiswa');
+        }
+
+        $absenMasuk->delete();
+        return response()->json([
+            'message' => 'Data Absen Masuk berhasil dihapus',
+            'data' => $absenMasuk
+        ], Response::HTTP_OK);
     }
 }
