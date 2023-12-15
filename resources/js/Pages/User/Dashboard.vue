@@ -180,7 +180,7 @@ const sendScreenshot_out = async (dataUrl: string) => {
             }
         });
         Toast.fire({
-            title: "Yeayy! Berhasil Absen Masuk",
+            title: "Yeayy! Berhasil Absen Keluar",
             icon: "success"
         });
         closeKeluar();
@@ -189,9 +189,9 @@ const sendScreenshot_out = async (dataUrl: string) => {
     }
 };
 
-const msk = ref({ waktu: '' });
+const msk = ref('');
 const getMsk = (() => { axios.get('api/masukk').then(res => { msk.value = res.data.data.pop() }) })
-const kl = ref({ waktu: '' });
+const kl = ref('');
 const getKlr = (() => { axios.get('api/keluarr').then(res => { kl.value = res.data.data.pop() }) })
 
 onMounted(() => {
@@ -250,7 +250,7 @@ onMounted(() => {
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Keluar</h1>
-                        <span class="text-xs">{{ kl.waktu ?? '-' }}</span>
+                        <span class="text-xs">{{ kl.waktu_out ?? '-' }}</span>
                     </div>
                 </div>
             </div>
@@ -265,7 +265,7 @@ onMounted(() => {
         </main>
 
         <!-- Dialog Untuk Kamera Absen Masuk -->
-        <ModalDialog :is-open="isOpen">
+        <ModalDialog :is-open="isOpen" @close="closeMasuk">
             <template v-slot:btn>
                 <BtnTutup @click="closeMasuk" />
             </template>

@@ -26,7 +26,7 @@ onMounted(async () => {
         ...item,
         type: 'Absen Masuk',
         icon: 'fa-solid fa-arrow-right-to-bracket',
-        color: 'border bg-gradient-to-br from-green-700 via-green-600 to-green-400 rounded-xl shadow-lg overflow-hidden p-4 border border-gray-500',
+        color: 'bg-gradient-to-br from-green-600 via-green-500 to-green-400 rounded-xl shadow-lg overflow-hidden p-4 border border-gray-300',
         warna: 'p-3 rounded-full mr-5 bg-green-300/50'
     }));
 
@@ -35,7 +35,7 @@ onMounted(async () => {
         ...item,
         type: 'Absen Keluar',
         icon: 'fa-solid fa-arrow-right-from-bracket',
-        color: 'border bg-gradient-to-br from-red-700 via-red-500 to-red-400 rounded-xl shadow-lg overflow-hidden p-4 border border-gray-500',
+        color: 'bg-gradient-to-br from-red-600 via-red-500 to-red-400 rounded-xl shadow-lg overflow-hidden p-4 border border-gray-300',
         warna: 'p-3 rounded-full mr-5 bg-red-300/50'
     }));
 

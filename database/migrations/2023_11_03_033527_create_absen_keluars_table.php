@@ -13,11 +13,11 @@ return new class extends Migration {
         Schema::create('absen_keluar', function (Blueprint $table) {
             $table->id();
             $table->foreignId('mahasiswa_id')->constrained('mahasiswa')->cascadeOnUpdate();
-            $table->string('foto_out');
-            $table->string('hari_out');
-            $table->string('tanggal_out');
-            $table->time('waktu_out');
-            $table->string('lokasi_out');
+            $table->string('foto');
+            $table->string('hari');
+            $table->string('tanggal');
+            $table->time('waktu');
+            $table->string('lokasi');
             $table->timestamps();
             $table->softDeletes();
         });

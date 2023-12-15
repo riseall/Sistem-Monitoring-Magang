@@ -55,13 +55,13 @@ class AbsenKeluarController extends Controller
         $validate = $request->validated();
         $createdAbsen = AbsenKeluar::query()->create($validate);
 
-        if ($request->hasFile('foto_out')) {
-            $foto = $request->file('foto_out');
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
             $filename = time() . '.' . $foto->getClientOriginalName();
             $foto->move(public_path('foto_absen'), $filename);
         }
 
-        $createdAbsen->update(['foto_out' => 'foto_absen/' . $filename]);
+        $createdAbsen->update(['foto' => 'foto_absen/' . $filename]);
 
         return response()->json([
             'message' => 'Berhasil menambahkan Data',
