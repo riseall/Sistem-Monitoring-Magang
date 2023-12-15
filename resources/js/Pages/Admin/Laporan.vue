@@ -14,7 +14,11 @@ const currentPage = ref(1);
 
 type Laporan = {
     id: string,
-    mahasiswa_id: string,
+    mahasiswa: {
+        nama: string,
+        nim: string,
+        kelas: string
+    },
     judul_laporan: string,
     laporan: string,
 }
@@ -122,7 +126,8 @@ onMounted(() => {
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">
                         <tr class="table-row">
                             <th class="th-items">No</th>
-                            <th class="th-items">Nama Mahasiswa</th>
+                            <th class="th-items">Nama</th>
+                            <th class="th-items">Nim</th>
                             <th class="th-items">Judul Laporan</th>
                             <th class="th-items">Laporan</th>
                             <th class="th-items">Aksi</th>
@@ -131,9 +136,14 @@ onMounted(() => {
                     <tbody class="divide-y divide-gray-100">
                         <tr class="odd:bg-gray-50" v-for="(Item, index) in disDosen" :key="Item.id">
                             <td class="td-items">{{ (currentPage - 1) * itemsPerPage + index + 1 }}.</td>
-                            <td class="td-items">{{ Item.mahasiswa_id }}</td>
+                            <td class="td-items">{{ Item.mahasiswa?.nama ?? '-' }}</td>
+                            <td class="td-items">{{ Item.mahasiswa?.nim ?? '-' }}</td>
                             <td class="td-items">{{ Item.judul_laporan }}</td>
-                            <td class="td-items">{{ Item.laporan }}</td>
+                            <td class="td-items"><a :href="Item.laporan" target="_blank"
+                                    class="flex text-sky-400 hover:text-sky-500">
+                                    <FontAwesomeIcon icon="fa-solid fa-file-pdf" class="mr-1 text-lg" />
+                                    Laporan
+                                </a></td>
                             <td class="p-3 text-white">
                                 <BtnDelete @click="deleteUser(Item.id)" />
                             </td>
