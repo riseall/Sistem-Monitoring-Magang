@@ -19,10 +19,10 @@ class AbsenKeluarController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('keywords');
-        $absenkeluar = AbsenKeluar::where('hari_out', 'like', '%' . $search . '%')
-            ->orWhere('tanggal_out', 'like', '%' . $search . '%')
-            ->orWhere('waktu_out', 'like', '%' . $search . '%')
-            ->orWhere('lokasi_out', 'like', '%' . $search . '%')
+        $absenkeluar = AbsenKeluar::where('hari', 'like', '%' . $search . '%')
+            ->orWhere('tanggal', 'like', '%' . $search . '%')
+            ->orWhere('waktu', 'like', '%' . $search . '%')
+            ->orWhere('lokasi', 'like', '%' . $search . '%')
             ->with(['mahasiswa' => function ($query) use ($search) {
                 $query->where('nama', 'like', '%' . $search . '%');
             }])
@@ -54,13 +54,13 @@ class AbsenKeluarController extends Controller
         $validate['mahasiswa_id'] = $request->get('mahasiswa_id');
         $createdAbsen = AbsenKeluar::query()->create($validate);
 
-        if ($request->hasFile('foto_out')) {
-            $foto = $request->file('foto_out');
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
             $filename = time() . '.' . $foto->getClientOriginalName();
             $foto->move(public_path('foto_absen'), $filename);
         }
 
-        $createdAbsen->update(['foto_out' => 'foto_absen/' . $filename]);
+        $createdAbsen->update(['foto' => 'foto_absen/' . $filename]);
 
         return response()->json([
             'message' => 'Berhasil menambahkan Data',

@@ -20,11 +20,11 @@ class AbsenKeluar extends Model
     ];
     protected $fillable = [
         'mahasiswa_id',
-        "foto_out",
-        "hari_out",
-        "tanggal_out",
-        "waktu_out",
-        "lokasi_out",
+        "foto",
+        "hari",
+        "tanggal",
+        "waktu",
+        "lokasi",
     ];
 
     public function mahasiswa(): BelongsTo

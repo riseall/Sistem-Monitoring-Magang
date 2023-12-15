@@ -5,28 +5,48 @@ import { onMounted, ref, } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-const absenMasuk = ref();
-const getMsk = (() => {
-    axios.get(`api/masukk`)
-        .then(result => {
-            console.log(result)
-            absenMasuk.value = result.data.data
-        })
-})
+interface AbsenItem {
+    hari: string;
+    tanggal: string;
+    waktu: string;
+    type: string;
+    icon: string;
+    color: string;
+    warna: string
+    // tambahkan properti lain jika ada
+}
 
+const absenMasuk = ref<AbsenItem[]>([]);
+const absenKeluar = ref<AbsenItem[]>([]);
+const combinedAbsen = ref<AbsenItem[]>([]);
 
-const absenKeluar = ref();
-const getKlr = (() => {
-    axios.get('api/keluarr')
-        .then(result => {
-            console.log(result)
-            absenKeluar.value = result.data.data
-        })
-})
+onMounted(async () => {
+    const resultMasuk = await axios.get(`api/masukk`);
+    absenMasuk.value = resultMasuk.data.data.map((item: AbsenItem) => ({
+        ...item,
+        type: 'Absen Masuk',
+        icon: 'fa-solid fa-arrow-right-to-bracket',
+        color: 'bg-gradient-to-br from-green-600 via-green-500 to-green-400 rounded-xl shadow-lg overflow-hidden p-4 border border-gray-300',
+        warna: 'p-3 rounded-full mr-5 bg-green-300/50'
+    }));
 
-onMounted(() => {
-    getMsk();
-    getKlr();
+    const resultKeluar = await axios.get('api/keluarr');
+    absenKeluar.value = resultKeluar.data.data.map((item: AbsenItem) => ({
+        ...item,
+        type: 'Absen Keluar',
+        icon: 'fa-solid fa-arrow-right-from-bracket',
+        color: 'bg-gradient-to-br from-red-600 via-red-500 to-red-400 rounded-xl shadow-lg overflow-hidden p-4 border border-gray-300',
+        warna: 'p-3 rounded-full mr-5 bg-red-300/50'
+    }));
+
+    for (let i = 0; i < absenMasuk.value.length; i++) {
+        if (absenKeluar.value[i]) {
+            combinedAbsen.value.push(absenMasuk.value[i], absenKeluar.value[i]);
+        } else {
+            combinedAbsen.value.push(absenMasuk.value[i]);
+        }
+    }
+    combinedAbsen.value.join(', ')
 });
 </script>
 <template>
@@ -38,32 +58,16 @@ onMounted(() => {
         </header>
 
         <main class="m-5">
-            <div class="grid gap-5 relative lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
-                <div v-for="Item in absenMasuk"
-                    class="bg-gradient-to-br from-green-600 via-green-500 to-green-400  rounded-xl shadow-lg overflow-hidden p-4 border border-gray-300">
-                    <div class="flex p-2 px-3 items-center">
-                        <div class="p-3 rounded-full mr-5 bg-green-300/50 ">
-                            <FontAwesomeIcon icon="fa-solid fa-arrow-right-to-bracket"
-                                class="mx-[0.15rem] text-2xl text-white" />
+            <div class="grid gap-3 relative lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
+                <div v-for="item in combinedAbsen" :class="item.color">
+                    <div class="flex px-3 items-center">
+                        <div class="p-3 rounded-full mr-5" :class="item.warna">
+                            <FontAwesomeIcon :icon="item.icon" class="mx-[0.15rem] text-2xl text-white" />
                         </div>
                         <div class="flex flex-col text-sm text-white">
-                            <h1 class="font-semibold">Absen Masuk</h1>
-                            <span class="text-xs">{{ Item.hari }}, {{ Item.tanggal }}</span>
-                            <span class="text-xs">{{ Item.waktu }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div v-for="Item in absenKeluar"
-                    class="bg-gradient-to-br from-red-600 via-red-500 to-red-400 rounded-xl shadow-lg overflow-hidden p-4 border border-gray-300">
-                    <div class="flex p-2 px-3 items-center">
-                        <div class="p-3 rounded-full mr-5 bg-red-300/50 ">
-                            <FontAwesomeIcon icon="fa-solid fa-arrow-right-from-bracket"
-                                class="mx-[0.15rem] text-2xl text-white" />
-                        </div>
-                        <div class="flex flex-col text-sm text-white">
-                            <h1 class="font-semibold">Absen Keluar</h1>
-                            <span class="text-xs">{{ Item.hari_out }}, {{ Item.tanggal_out }}</span>
-                            <span class="text-xs">{{ Item.waktu_out }}</span>
+                            <h1 class="font-semibold">{{ item.type }}</h1>
+                            <span class="text-xs">{{ item.hari }}, {{ item.tanggal }}</span>
+                            <span class="text-xs">{{ item.waktu }}</span>
                         </div>
                     </div>
                 </div>

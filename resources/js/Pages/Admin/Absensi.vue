@@ -14,12 +14,6 @@ interface AbsenItem {
     tanggal: string;
     waktu: string;
     lokasi: string;
-    id_out: string;
-    foto_out: string;
-    hari_out: string;
-    tanggal_out: string;
-    waktu_out: string;
-    lokasi_out: string;
     mahasiswa: {
         nama: string
         nim: string
@@ -283,7 +277,7 @@ onMounted(() => {
                     <input type="text" class="rounded-lg text-xs p-[0.3 rem]" v-model="keywords" placeholder="Search">
                     <ul v-if="results.length > 0">
                         <li v-for="result in results" :key="result.id"
-                            v-text="result.hari_out, result.tanggal_out, result.waktu_out, result.lokasi_out"></li>
+                            v-text="result.hari, result.tanggal, result.waktu, result.lokasi"></li>
                     </ul>
                 </div>
             </div>
@@ -303,18 +297,18 @@ onMounted(() => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <tr class="odd:bg-gray-50" v-for="(Item, index) in displayedItems_out" :key="Item.id_out">
+                        <tr class="odd:bg-gray-50" v-for="(Item, index) in displayedItems_out" :key="Item.id">
                             <td class="td-items">{{ (currentPage_out - 1) * itemsPerPage + index + 1 }}.</td>
                             <td class="td-items">{{ Item.mahasiswa?.nama ?? '-' }}</td>
                             <td class="td-items">{{ Item.mahasiswa?.nim ?? '-' }}</td>
                             <td class="rounded-lg">
-                                <img :src="Item.foto_out" class="w-12 h-12 object-contain">
+                                <img :src="Item.foto" class="w-12 h-12 object-contain">
                             </td>
-                            <td class="td-items">{{ Item.hari_out }}</td>
-                            <td class="td-items">{{ Item.tanggal_out }}</td>
-                            <td class="td-items">{{ Item.waktu_out }}</td>
+                            <td class="td-items">{{ Item.hari }}</td>
+                            <td class="td-items">{{ Item.tanggal }}</td>
+                            <td class="td-items">{{ Item.waktu }}</td>
                             <td class="td-items">
-                                <a :href="Item.lokasi_out" target="_blank" class="flex text-sky-400 hover:text-sky-500">
+                                <a :href="Item.lokasi" target="_blank" class="flex text-sky-400 hover:text-sky-500">
                                     <FontAwesomeIcon icon="fa-solid fa-map-location-dot" class="mr-1 text-lg" />
                                     Lokasi
                                 </a>

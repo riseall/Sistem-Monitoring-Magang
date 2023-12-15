@@ -121,8 +121,9 @@ function toggleDrop() {
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </button>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ $page.props.auth.user.role
-                                    }}</span>
+                                    <span class="text-xs ml-2 text-gray-500 dark:text-gray-400">
+                                        {{ $page.props.auth.user.role }}
+                                    </span>
                                 </span>
                             </div>
                         </div>
@@ -130,11 +131,19 @@ function toggleDrop() {
                             class="absolute right-[10px] z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg overflow-hidden ring-1 block text-left text-sm leading-5 text-gray-700 dark:text-gray-300">
                             <Link :href="route('profile.edit')" class="drop-item" role="menuitem" tabindex="-1"
                                 id="menu-item-0">
-                            Profile
+                            <div class="space-x-2">
+                                <FontAwesomeIcon icon="fa-solid fa-user" class="text-md ml-[0.1rem] text-gray-900" />
+                                <span class="text-sm">Profile</span>
+                            </div>
                             </Link>
+                            <hr>
                             <Link :href="route('logout')" method="post" as="button" class="drop-item" role="menuitem"
                                 tabindex="-1" id="menu-item-0">
-                            Log Out
+                            <div class="space-x-2">
+                                <FontAwesomeIcon icon="fa-solid fa-arrow-right-from-bracket"
+                                    class="text-md ml-[0.1rem] text-rose-700" />
+                                <span class="text-sm">LogOut</span>
+                            </div>
                             </Link>
                         </div>
                     </div>

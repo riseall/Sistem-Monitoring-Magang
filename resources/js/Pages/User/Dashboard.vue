@@ -180,7 +180,7 @@ const sendScreenshot_out = async (dataUrl: string) => {
             }
         });
         Toast.fire({
-            title: "Yeayy! Berhasil Absen Masuk",
+            title: "Yeayy! Berhasil Absen Keluar",
             icon: "success"
         });
         closeKeluar();
@@ -189,17 +189,22 @@ const sendScreenshot_out = async (dataUrl: string) => {
     }
 };
 
+const msk = ref('');
+const getMsk = (() => { axios.get('api/masukk').then(res => { msk.value = res.data.data.pop() }) })
+const kl = ref('');
+const getKlr = (() => { axios.get('api/keluarr').then(res => { kl.value = res.data.data.pop() }) })
 
 onMounted(() => {
     updateTime();
     getLocation();
+    getMsk();
+    getKlr();
 });
 
 </script>
 <template>
+    <Head title="Dashboard" />
     <NavbarBottom>
-
-        <Head title="Dashboard" />
         <div class="bg-gray-800 text-white p-6 overflow-auto">
             <div class="flex items-center justify-between">
                 <div>
@@ -233,7 +238,7 @@ onMounted(() => {
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Masuk</h1>
-                        <span class="text-xs">07.00</span>
+                        <span class="text-xs">{{ msk.waktu ?? '-' }}</span>
                     </div>
                 </div>
                 <div class="bg-white rounded-md shadow-lg flex p-4 py-5 border border-gray-300">
@@ -242,7 +247,7 @@ onMounted(() => {
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Keluar</h1>
-                        <span class="text-xs">07.00</span>
+                        <span class="text-xs">{{ kl.waktu_out ?? '-' }}</span>
                     </div>
                 </div>
             </div>
@@ -257,7 +262,7 @@ onMounted(() => {
         </main>
 
         <!-- Dialog Untuk Kamera Absen Masuk -->
-        <ModalDialog :is-open="isOpen">
+        <ModalDialog :is-open="isOpen" @close="closeMasuk">
             <template v-slot:btn>
                 <BtnTutup @click="closeMasuk" />
             </template>
