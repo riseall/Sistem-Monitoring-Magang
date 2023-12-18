@@ -127,7 +127,9 @@ class MahasiswaController extends Controller
         if (!empty($mahasiswa->foto)) {
             $filePath = public_path($mahasiswa->foto);
             if (File::exists($filePath)) {
-                File::delete($filePath);
+                if (basename($filePath) !== 'pas_foto_kosong.png') {
+                    File::delete($filePath);
+                }
             }
         }
 
