@@ -8,7 +8,7 @@ use App\Http\Controllers\DosenController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MagangController;
-use App\Http\Controllers\PerusahaanController;
+use App\Http\Controllers\Api\PerusahaanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

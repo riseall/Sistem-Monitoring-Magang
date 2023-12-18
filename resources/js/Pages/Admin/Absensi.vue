@@ -100,12 +100,12 @@ const visPageOut = computed(() => {
             pageNum.push(i);
         }
     } else {
-        if (currentPage.value <= 4) {
+        if (currentPage_out.value <= 4) {
             pageNum = [1, 2, 3, 4, 5, '....', totalPages_out.value];
-        } else if (currentPage.value >= totalPages_out.value - 3) {
+        } else if (currentPage_out.value >= totalPages_out.value - 3) {
             pageNum = [1, '....', totalPages_out.value - 4, totalPages_out.value - 3, totalPages_out.value - 2, totalPages_out.value - 1, totalPages_out.value]
         } else {
-            pageNum = [1, '....', currentPage.value, currentPage.value + 1, '....', totalPages_out.value]
+            pageNum = [1, '....', currentPage_out.value, currentPage_out.value + 1, '....', totalPages_out.value]
         }
     }
     return pageNum;
@@ -113,7 +113,7 @@ const visPageOut = computed(() => {
 
 const changeOut = (page: number) => {
     if (page >= 1 && page <= totalPages_out.value) {
-        currentPage.value = page
+        currentPage_out.value = page
     }
 }
 
@@ -191,8 +191,8 @@ onMounted(() => {
     <Sidebar>
         <!-- Data Absen Masuk -->
         <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
-            <h3 class="text-lg font-semibold text-left">Data Absen Masuk</h3>
             <div class="flex justify-between mb-4 mt-3 items-start-start">
+                <h3 class="text-lg font-semibold text-left">Data Absen Masuk</h3>
                 <div>
                     <input type="text" class="rounded-lg text-xs p-[0.3 rem]" v-model="key" placeholder="Search">
                     <ul v-if="res.length > 0">
@@ -271,8 +271,8 @@ onMounted(() => {
         <!-- Data Absen Keluar -->
         <div
             class="container block my-10 mb-20 bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
-            <h3 class="text-lg font-semibold text-left">Data Absen Keluar</h3>
             <div class="flex justify-between mb-4 mt-3 items-start-start">
+                <h3 class="text-lg font-semibold text-left">Data Absen Keluar</h3>
                 <div>
                     <input type="text" class="rounded-lg text-xs p-[0.3 rem]" v-model="keywords" placeholder="Search">
                     <ul v-if="results.length > 0">
@@ -325,20 +325,20 @@ onMounted(() => {
                         <p class="text-xs text-gray-700 font-semibold">Jumlah Data : {{ totalItems_out }}</p>
                         <ul class="flex pl-0 rounded list-none flex-wrap justify-center">
                             <li>
-                                <a href="#" @click="changeOut(currentPage - 1)" :disabled="(currentPage === 1)"
+                                <a href="#" @click="changeOut(currentPage_out - 1)" :disabled="(currentPage_out === 1)"
                                     class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
                                     <FontAwesomeIcon icon="fas fa-chevron-left -ml-px" />
                                 </a>
                             </li>
                             <li v-for="Items in visPageOut" :key="Items"
-                                :class="{ active: currentPage == Items || Items === '....' }">
+                                :class="{ active: currentPage_out == Items || Items === '....' }">
                                 <a href="#" @click="changeOut(Number(Items))"
                                     class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 text-sky-400 focus:text-white focus:bg-sky-300 hover:bg-sky-300 hover:text-white">
                                     {{ Items }}
                                 </a>
                             </li>
                             <li>
-                                <a href="#" @click="changeOut(currentPage + 1)" :disabled="(currentPage === 1)"
+                                <a href="#" @click="changeOut(currentPage_out + 1)" :disabled="(currentPage_out === 1)"
                                     class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
                                     <FontAwesomeIcon icon="fas fa-chevron-right -ml-px" />
                                 </a>
