@@ -191,7 +191,8 @@ onMounted(() => {
     <Head title="Absensi" />
     <Sidebar>
         <!-- Data Absen Masuk -->
-        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+        <div
+            class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex justify-between mb-4 mt-3 items-start-start">
                 <h3 class="text-lg font-semibold text-left">Data Absen Masuk</h3>
                 <div>
@@ -271,7 +272,7 @@ onMounted(() => {
 
         <!-- Data Absen Keluar -->
         <div
-            class="block my-10 mb-20 bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+            class="container block my-10 mb-20 bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex justify-between mb-4 mt-3 items-start-start">
                 <h3 class="text-lg font-semibold text-left">Data Absen Keluar</h3>
                 <div>

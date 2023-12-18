@@ -11,6 +11,7 @@ defineProps<{
 </script>
 
 <template>
+
     <Head title="Keamanan" />
 
     <div class="h-full font-montserrat bg-zinc-200">

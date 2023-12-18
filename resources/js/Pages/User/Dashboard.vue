@@ -156,11 +156,11 @@ const sendScreenshot_out = async (dataUrl: string) => {
 
         const formData = new FormData();
         formData.append('mahasiswa_id', user_id);
-        formData.append('foto_out', blob, 'png');
-        formData.append('hari_out', currentDay.value);
-        formData.append('tanggal_out', currentDate.value);
-        formData.append('waktu_out', currentTime.value);
-        formData.append('lokasi_out', location.value);
+        formData.append('foto', blob, 'png');
+        formData.append('hari', currentDay.value);
+        formData.append('tanggal', currentDate.value);
+        formData.append('waktu', currentTime.value);
+        formData.append('lokasi', location.value);
 
         // Kirim FormData ke server menggunakan Axios
         const response = await axios.post('api/absenKeluar', formData, {
@@ -189,7 +189,7 @@ const sendScreenshot_out = async (dataUrl: string) => {
     }
 };
 
-const msk = ref('');
+const msk = ref([]);
 const getMsk = (() => { axios.get('api/masukk').then(res => { msk.value = res.data.data.pop() }) })
 const kl = ref('');
 const getKlr = (() => { axios.get('api/keluarr').then(res => { kl.value = res.data.data.pop() }) })
@@ -250,7 +250,7 @@ onMounted(() => {
                     </div>
                     <div class="text-sm">
                         <h1 class="font-semibold">Keluar</h1>
-                        <span class="text-xs">{{ kl.waktu_out ?? '-' }}</span>
+                        <span class="text-xs">{{ kl.waktu ?? '-' }}</span>
                     </div>
                 </div>
             </div>

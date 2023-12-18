@@ -35,6 +35,7 @@ const post = async () => {
 }
 </script>
 <template>
+
     <Head title="Magang" />
 
     <div class="min-h-screen font-montserrat bg-zinc-100">

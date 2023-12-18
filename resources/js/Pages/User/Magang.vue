@@ -81,6 +81,7 @@ onMounted(async () => {
 })
 </script>
 <template>
+
     <Head title="Magang" />
 
     <div class="min-h-screen font-montserrat bg-zinc-100">
@@ -123,8 +124,9 @@ onMounted(async () => {
                                 <template v-slot:input>
                                     <select name="" id="" v-model="formData.perusahaan_id" class="input-form">
                                         <option value="">Masukkan Nama Perusahaan</option>
-                                        <option v-for="(M, index) in prs" class="bg-slate-300" :key="index" :value="M.id">{{
-                                            M.nama }}</option>
+                                        <option v-for="(M, index) in prs" class="bg-slate-300" :key="index"
+                                            :value="M.id">{{
+                            M.nama }}</option>
                                     </select>
                                 </template>
                             </InputForm>
@@ -140,7 +142,8 @@ onMounted(async () => {
                             <InputForm>
                                 <template v-slot:title>Posisi</template>
                                 <template v-slot:input>
-                                    <input type="text" v-model="formData.posisi" placeholder="Posisi" class="input-form" />
+                                    <input type="text" v-model="formData.posisi" placeholder="Posisi"
+                                        class="input-form" />
                                 </template>
                             </InputForm>
 
@@ -149,8 +152,9 @@ onMounted(async () => {
                                 <template v-slot:input>
                                     <select name="" id="" v-model="formData.laporan_id" class="input-form">
                                         <option value="">Masukkan Judul Laporan</option>
-                                        <option v-for="(M, index) in lpr" class="bg-slate-300" :key="index" :value="M.id">{{
-                                            M.judul_laporan }}</option>
+                                        <option v-for="(M, index) in lpr" class="bg-slate-300" :key="index"
+                                            :value="M.id">{{
+                            M.judul_laporan }}</option>
                                     </select>
                                 </template>
                             </InputForm>
