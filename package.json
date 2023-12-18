@@ -30,6 +30,7 @@
         "@headlessui/vue": "^1.7.16",
         "date-fns": "^2.30.0",
         "sweetalert2": "^11.7.32",
-        "vue3-datepicker": "^0.4.0"
+        "vue3-datepicker": "^0.4.0",
+        "vue3-google-map": "^0.18.0"
     }
 }
