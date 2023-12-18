@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class perusahaan extends Model
+class Perusahaan extends Model
 {
     use HasFactory, Notifiable, SoftDeletes;
-
+    
     protected $table = 'perusahaan';
 
     protected $hidden = [
@@ -19,14 +19,11 @@ class perusahaan extends Model
         'updated_at',
         'deleted_at',
     ];
+
     protected $fillable = [
         'nama',
         'email',
-        'alamat'
+        'alamat',
     ];
 
-    public function magang(): HasMany
-    {
-        return $this->hasMany(magang::class);
-    }
 }
