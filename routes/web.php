@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -42,6 +43,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/userP', [UserProfileController::class, 'edit'])->name('userP.edit');
+    Route::patch('/userP', [UserProfileController::class, 'update'])->name('userP.update');
+    Route::delete('/userP', [UserProfileController::class, 'destroy'])->name('userP.destroy');
 
     Route::middleware(['checkAdmin'])->group(function () {
         // Route untuk Tampilan Admin
