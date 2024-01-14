@@ -21,12 +21,14 @@ class magang extends Model
 
     protected $fillable = [
         'mahasiswa_id',
-        'perusahaaan_id',
+        'perusahaan_id',
         'periode',
         'posisi',
         'dosen_id',
         'laporan_id'
     ];
+
+    protected $dates = ['periode'];
 
     public function mahasiswa(): BelongsTo
     {

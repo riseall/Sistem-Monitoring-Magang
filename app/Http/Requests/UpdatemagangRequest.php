@@ -11,7 +11,7 @@ class UpdatemagangRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdatemagangRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'mahasiswa_id' => 'sometimes',
+            'perusahaan_id' => 'sometimes|nullable',
+            'periode' => 'sometimes|string',
+            'posisi' => 'sometimes|string',
+            'dosen_id' => 'sometimes|nullable',
+            'laporan_id' => 'sometimes|nullable'
         ];
     }
 }

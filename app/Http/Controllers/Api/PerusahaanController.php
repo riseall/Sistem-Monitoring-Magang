@@ -6,7 +6,8 @@ use App\Exceptions\MyModelNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePerusahaanRequest;
 use App\Http\Requests\UpdatePerusahaanRequest;
-use App\Models\Perusahaan;
+use App\Models\perusahaan;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,9 +17,10 @@ class PerusahaanController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        $perusahaan = Perusahaan::all();
+        $search = $request->get('keywords');
+        $perusahaan = perusahaan::where('nama', 'like', '%' . $search . '%')->get();
         return new JsonResponse(
             [
                 'message' => 'Data Perusahaan',
@@ -31,18 +33,18 @@ class PerusahaanController extends Controller
     public function store(StorePerusahaanRequest $request)
     {
         $validateData = $request->validated();
-        $createdPerusahaan = Perusahaan::query()->create($validateData);
-    
+        $perusahaan = perusahaan::query()->create($validateData);
+
         return response()->json([
             'message' => 'Berhasil Menambahkan Perusahaan',
-            'data' => $createdPerusahaan
+            'data' => $perusahaan
         ], Response::HTTP_CREATED);
     }
-    
+
     public function show(string $id)
     {
 
-        $perusahaan = Perusahaan::query()->find($id);
+        $perusahaan = perusahaan::query()->find($id);
         if (empty($perusahaan)) {
             throw new MyModelNotFoundException('perusahaan');
         }
@@ -58,7 +60,7 @@ class PerusahaanController extends Controller
      */
     public function update(UpdatePerusahaanRequest $request, string $id)
     {
-        $perusahaan = Perusahaan::query()->find($id);
+        $perusahaan = perusahaan::query()->find($id);
         if (empty($perusahaan)) {
             throw new MyModelNotFoundException('perusahaan');
         }
@@ -75,7 +77,7 @@ class PerusahaanController extends Controller
      */
     public function destroy(string $id)
     {
-        $perusahaan = Perusahaan::query()->find($id);
+        $perusahaan = perusahaan::query()->find($id);
         if (empty($perusahaan)) {
             throw new MyModelNotFoundException('perusahaan');
         }

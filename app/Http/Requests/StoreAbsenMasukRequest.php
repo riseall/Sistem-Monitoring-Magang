@@ -23,7 +23,7 @@ class StoreAbsenMasukRequest extends FormRequest
     {
         return [
             'mahasiswa_id' => 'required|exists:users,id',
-            'foto' => 'required|file|mimes:jpg,png,pdf|max:2048',
+            'foto' => 'required|file|mimes:jpg,png,pdf|max:10000',
             'hari' => 'required',
             'tanggal' => 'required',
             'waktu' => 'required',

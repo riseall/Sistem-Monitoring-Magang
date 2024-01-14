@@ -46,11 +46,11 @@ class DosenController extends Controller
     public function store(StoredosenRequest $request)
     {
         $validateData = $request->validated();
-        $createUser = dosen::query()->create($validateData);
+        $createLaporan = dosen::query()->create($validateData);
 
         return response()->json([
-            'message' => 'Berhasil Menambahkan Dosen',
-            'data' => $createUser
+            'message' => 'Berhasil Menambahkan Laporan',
+            'data' => $createLaporan
         ], Response::HTTP_CREATED);
     }
 
