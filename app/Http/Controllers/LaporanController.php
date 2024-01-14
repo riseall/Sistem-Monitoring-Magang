@@ -67,9 +67,17 @@ class LaporanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(laporan $laporan)
+    public function show(string $id)
     {
-        //
+        $laporan = laporan::query()->find($id);
+        if (empty($laporan)) {
+            throw new MyModelNotFoundException('laporan');
+        }
+
+        return response()->json([
+            'message' => 'Data Laporan',
+            'data' => $laporan
+        ], Response::HTTP_OK);
     }
 
     /**

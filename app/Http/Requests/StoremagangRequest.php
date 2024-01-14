@@ -11,7 +11,7 @@ class StoremagangRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoremagangRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'mahasiswa_id' => 'required',
+            'perusahaan_id' => 'nullable',
+            'periode' => 'string',
+            'posisi' => 'string',
+            'dosen_id' => 'nullable',
+            'laporan_id' => 'nullable'
         ];
     }
 }
