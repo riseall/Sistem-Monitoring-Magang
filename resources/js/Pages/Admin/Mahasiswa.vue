@@ -279,8 +279,7 @@ onMounted(() => {
     <Head title="Mahasiswa" />
 
     <Sidebar>
-        <div
-            class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <h3 class="text-lg font-semibold text-left">Data Mahasiswa</h3>
             <div class="flex justify-between mb-4 mt-3 items-start-start">
                 <div>
@@ -292,7 +291,7 @@ onMounted(() => {
                 </div>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>
             </div>
-            <div class="container overflow-x-auto rounded-lg">
+            <div class="overflow-x-auto rounded-lg">
                 <!-- Table Mahasiswa -->
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">
