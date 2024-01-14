@@ -200,7 +200,7 @@ onMounted(() => {
     <Head title="User" />
 
     <Sidebar>
-        <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex mb-4 items-start-start">
                 <h3 class="text-lg font-semibold text-left">Data User</h3>
             </div>
@@ -213,7 +213,7 @@ onMounted(() => {
                 </div>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>
             </div>
-            <div class="container overflow-x-auto rounded-lg">
+            <div class="overflow-x-auto rounded-lg">
                 <!-- Table User -->
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">

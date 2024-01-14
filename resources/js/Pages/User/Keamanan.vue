@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
-import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm.vue';
+import DeleteUserForm from '@/Pages/User/Partials/DeleteUserForm.vue';
+import UpdatePasswordForm from '@/Pages/User/Partials/UpdatePasswordForm.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -14,7 +14,7 @@ defineProps<{
     <Head title="Keamanan" />
 
     <div class="h-full font-montserrat bg-zinc-200">
-        <header class="h-14 p-2 flex flex-col justify-end bg-white shadow-lg">
+        <header class="sticky top-0 z-10 h-14 p-2 flex flex-col justify-end bg-white shadow-lg">
             <div class="flex items-center justify-between">
                 <Link href="user.setting" class="flex text-sm text-sky-600 hover:text-sky-400">
                 <FontAwesomeIcon icon="fa-solid fa-chevron-left" class="text-lg" />

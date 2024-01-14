@@ -190,7 +190,7 @@ onMounted(() => {
     <Head title="Absensi" />
     <Sidebar>
         <!-- Data Absen Masuk -->
-        <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex justify-between mb-4 mt-3 items-start-start">
                 <h3 class="text-lg font-semibold text-left">Data Absen Masuk</h3>
                 <div>
@@ -200,7 +200,7 @@ onMounted(() => {
                     </ul>
                 </div>
             </div>
-            <div class="container overflow-x-auto rounded-lg">
+            <div class="overflow-x-auto rounded-lg">
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0">
                         <tr class="table-row">
@@ -270,7 +270,7 @@ onMounted(() => {
 
         <!-- Data Absen Keluar -->
         <div
-            class="container block my-10 mb-20 bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+            class="block my-10 mb-20 bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex justify-between mb-4 mt-3 items-start-start">
                 <h3 class="text-lg font-semibold text-left">Data Absen Keluar</h3>
                 <div>
@@ -281,14 +281,14 @@ onMounted(() => {
                     </ul>
                 </div>
             </div>
-            <div class="container overflow-x-auto rounded-lg">
+            <div class="overflow-x-auto rounded-lg">
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0">
                         <tr class="table-row">
                             <th class="th-items">No</th>
                             <th class="th-items">Nama</th>
                             <th class="th-items">NIM</th>
-                            <th class="th-items">Foto</th>
+                            <th class="th-items">Foto Absen</th>
                             <th class="th-items">Hari</th>
                             <th class="th-items">Tanggal</th>
                             <th class="th-items">Waktu Absen</th>

@@ -10,6 +10,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowRightFromBracket, faArrowRightToBracket, faBook, faBriefcase, faBuilding, faCalendarDays, faCameraRetro, faChevronLeft, faChevronRight, faClipboard, faClockRotateLeft, faFilePdf, faGear, faHouseChimney, faMapLocationDot, faShieldHalved, faUser, faUserTie, faUsers} from '@fortawesome/free-solid-svg-icons'
 library.add(faHouseChimney, faUsers, faChevronRight, faChevronLeft, faBuilding, faBriefcase, faClipboard, faBook, faUserTie, faUser, faShieldHalved, faMapLocationDot, faClockRotateLeft, faUser, faCameraRetro, faArrowRightToBracket, faArrowRightFromBracket, faCalendarDays, faGear, faFilePdf)
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 const appName = import.meta.env.VITE_APP_NAME || 'Internship Monitor';
 
 createInertiaApp({
@@ -20,6 +22,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .component('font-awesome-icon', FontAwesomeIcon)
+            .component('VueDatePicker', VueDatePicker)
             .mount(el);
     },
     progress: {

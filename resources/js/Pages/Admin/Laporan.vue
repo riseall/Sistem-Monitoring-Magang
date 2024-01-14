@@ -110,7 +110,7 @@ onMounted(() => {
     <Head title="Laporan" />
 
     <Sidebar>
-        <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex justify-between mb-4 items-start-start">
                 <h3 class="text-lg font-semibold text-left">Data Laporan</h3>
                 <div class="flex items-start-start">
@@ -120,7 +120,7 @@ onMounted(() => {
                     </ul>
                 </div>
             </div>
-            <div class="container overflow-x-auto rounded-lg">
+            <div class="overflow-x-auto rounded-lg">
                 <!-- Table Laporan -->
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">

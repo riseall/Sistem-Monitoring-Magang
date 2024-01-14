@@ -3,9 +3,11 @@ import { Head, Link } from '@inertiajs/vue3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import InputForm from '@/Components/Form/InputForm.vue';
 import BlueButton from '@/Components/UI/BlueButton.vue';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ref } from 'vue';
+import Swal from 'sweetalert2'
 
+const errors = ref();
 const form = ref({
     id: '',
     nama: '',
@@ -13,12 +15,24 @@ const form = ref({
     alamat: ''
 })
 
-const post = (async () => {
+const post = async () => {
     await axios.post('api/perusahaan', form.value)
         .then(res => {
-            console.log(res);
+            console.log(res.data);
+            // response sukses
+            Swal.fire({
+                title: "Yeayy!",
+                text: "Berhasil Menambahkan Data.",
+                icon: "success"
+            });
         })
-})
+        .catch(error => {
+            if (error instanceof AxiosError) {
+                errors.value = error.response?.data.errors;
+            }
+            console.error('Post gagal:', error);
+        })
+}
 </script>
 <template>
     <Head title="Magang" />
@@ -43,30 +57,23 @@ const post = (async () => {
                             <InputForm>
                                 <template v-slot:title>Nama</template>
                                 <template v-slot:input>
-                                    <input type="text" placeholder="Nama" class="input-form" />
+                                    <input type="text" v-model="form.nama" placeholder="Nama" class="input-form" />
                                 </template>
                             </InputForm>
 
                             <InputForm>
                                 <template v-slot:title>Email</template>
                                 <template v-slot:input>
-                                    <input type="text" placeholder="Email" class="input-form" />
+                                    <input type="text" v-model="form.email" placeholder="Email" class="input-form" />
                                 </template>
                             </InputForm>
 
                             <InputForm>
                                 <template v-slot:title>Alamat</template>
                                 <template v-slot:input>
-                                    <input type="text" placeholder="Alamat" class="input-form" />
+                                    <input type="text" v-model="form.alamat" placeholder="Alamat" class="input-form" />
                                 </template>
                             </InputForm>
-
-                            <!--  <InputForm>
-                                <template v-slot:title>Website</template>
-                                <template v-slot:input>
-                                    <input type="text" placeholder="Website" class="input-form" />
-                                </template>
-                            </InputForm> -->
                         </div>
                         <div class="rounded-t mb-0 px- py-3">
                             <div class="text-center flex justify-end">

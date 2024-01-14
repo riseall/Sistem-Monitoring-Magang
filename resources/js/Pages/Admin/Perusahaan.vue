@@ -2,7 +2,7 @@
 import Sidebar from '@/Components/Sidebar.vue';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
-import { Ref, ref, onMounted } from 'vue';
+import { Ref, ref, onMounted, computed } from 'vue';
 import BlueButton from '@/Components/UI/BlueButton.vue';
 import RedButton from '@/Components/UI/RedButton.vue';
 import ModalDialog from '@/Components/ModalDialog.vue';
@@ -11,6 +11,7 @@ import BtnEdit from '@/Components/UI/BtnEdit.vue';
 import BtnDelete from '@/Components/UI/BtnDelete.vue';
 import { AxiosError } from 'axios';
 import Swal from 'sweetalert2'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const errors = ref();
 const isOpen = ref(false)
@@ -41,6 +42,8 @@ const editClose = () => {
         alamat: ''
     }
 }
+const itemsPerPage = 5;
+const currentPage = ref(1);
 
 type Perusahaan = {
     id: string,
@@ -56,6 +59,39 @@ const getPrs = async () => {
             console.log(result)
             perusahaan.value = result.data.data
         });
+}
+
+const totalItems = computed(() => perusahaan.value.length);
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
+
+const displayedItems = computed(() => {
+    const startIndex = (currentPage.value - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return perusahaan.value.slice(startIndex, endIndex);
+});
+
+const visPageNum = computed(() => {
+    let pageNum = []
+    if (totalPages.value <= 7) {
+        for (let i = 1; i <= totalPages.value; i++) {
+            pageNum.push(i);
+        }
+    } else {
+        if (currentPage.value <= 4) {
+            pageNum = [1, 2, 3, 4, 5, '....', totalPages.value];
+        } else if (currentPage.value >= totalPages.value - 3) {
+            pageNum = [1, '....', totalPages.value - 4, totalPages.value - 3, totalPages.value - 2, totalPages.value - 1, totalPages.value]
+        } else {
+            pageNum = [1, '....', currentPage.value, currentPage.value + 1, '....', totalPages.value]
+        }
+    }
+    return pageNum;
+});
+
+const changePage = (page: number) => {
+    if (page >= 1 && page <= totalPages.value) {
+        currentPage.value = page
+    }
 }
 
 const formData: Ref<Perusahaan> = ref({
@@ -152,12 +188,12 @@ onMounted(() => {
     <head title="Perusahaan"></head>
 
     <Sidebar>
-        <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex justify-between mb-4 items-start-start">
                 <h3 class="text-xl font-bold text-left">Data Perusahaan</h3>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>
             </div>
-            <div class="container overflow-x-auto rounded-lg">
+            <div class="overflow-x-auto rounded-lg">
                 <!-- Table Perusahaan -->
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">
@@ -185,6 +221,32 @@ onMounted(() => {
                     </tbody>
                 </table>
                 <!-- End Table Perusahaan -->
+                <div class="py-2">
+                    <nav class="block">
+                        <p class="text-xs text-gray-700 font-semibold">Jumlah Data : {{ totalItems }}</p>
+                        <ul class="flex pl-0 rounded list-none flex-wrap justify-center">
+                            <li>
+                                <a href="#" @click="changePage(currentPage - 1)" :disabled="(currentPage === 1)"
+                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
+                                    <FontAwesomeIcon icon="fas fa-chevron-left -ml-px" />
+                                </a>
+                            </li>
+                            <li v-for="Items in visPageNum" :key="Items"
+                                :class="{ active: currentPage == Items || Items === '....' }">
+                                <a href="#" @click="changePage(Number(Items))"
+                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 text-sky-400 focus:text-white focus:bg-sky-300 hover:bg-sky-300 hover:text-white">
+                                    {{ Items }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" @click="changePage(currentPage + 1)" :disabled="(currentPage === 1)"
+                                    class="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-sky-500 bg-white text-sky-500 hover:bg-sky-300 hover:text-white">
+                                    <FontAwesomeIcon icon="fas fa-chevron-right -ml-px" />
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
 
@@ -235,7 +297,7 @@ onMounted(() => {
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">
-                            <BlueButton @click="createPrs" type="submit" class="mr-2">Simpan</BlueButton>
+                            <BlueButton type="submit" class="mr-2">Simpan</BlueButton>
                             <RedButton @click="closeModal">Batal</RedButton>
                         </div>
                     </div>

@@ -189,9 +189,9 @@ const sendScreenshot_out = async (dataUrl: string) => {
     }
 };
 
-const msk = ref([]);
+const msk = ref({ waktu: '' });
 const getMsk = (() => { axios.get('api/masukk').then(res => { msk.value = res.data.data.pop() }) })
-const kl = ref('');
+const kl = ref({ waktu: '' });
 const getKlr = (() => { axios.get('api/keluarr').then(res => { kl.value = res.data.data.pop() }) })
 
 onMounted(() => {

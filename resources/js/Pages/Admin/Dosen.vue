@@ -200,7 +200,7 @@ onMounted(() => {
     <Head title="Dosen" />
 
     <Sidebar>
-        <div class="container block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
+        <div class="block bg-white border border-gray-100 shadow-md shadow-black/5 rounded-lg p-6 overflow-auto">
             <div class="flex mb-4 items-start-start">
                 <h3 class="text-lg font-semibold text-left">Data Dosen</h3>
             </div>
@@ -213,7 +213,7 @@ onMounted(() => {
                 </div>
                 <BlueButton @click="openModal">Tambah Data</BlueButton>
             </div>
-            <div class="container overflow-x-auto rounded-lg">
+            <div class="overflow-x-auto rounded-lg">
                 <!-- Table Dosen -->
                 <table class="w-full align-middle border border-collapse">
                     <thead class="text-left text-gray-100 bg-gray-700 sticky top-0 rounded-lg">
@@ -330,7 +330,7 @@ onMounted(() => {
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">
-                            <BlueButton @click="createDosen" type="submit" class="mr-2">Simpan</BlueButton>
+                            <BlueButton type="submit" class="mr-2">Simpan</BlueButton>
                             <RedButton @click="closeModal">Batal</RedButton>
                         </div>
                     </div>
@@ -392,7 +392,7 @@ onMounted(() => {
                     </div>
                     <div class="rounded-t mb-0 px-6 py-6">
                         <div class="text-center flex justify-end">
-                            <BlueButton @click="updateDosen" type="submit" class="mr-2">Simpan</BlueButton>
+                            <BlueButton type="submit" class="mr-2">Simpan</BlueButton>
                             <RedButton @click="editClose">Batal</RedButton>
                         </div>
                     </div>

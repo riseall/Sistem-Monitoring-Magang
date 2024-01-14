@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
-import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm.vue';
-import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm.vue';
+import UpdateProfileInformationForm from '@/Pages/User/Partials/UpdateProfileInformationForm.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 

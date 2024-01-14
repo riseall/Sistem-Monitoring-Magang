@@ -37,6 +37,7 @@ const post = async (event: Event) => {
     event.preventDefault();
 
     const form = new FormData();
+    form.append('id', user_id);
     form.append('mahasiswa_id', user_id);
     form.append('judul_laporan', formData.value.judul_laporan);
     try {
