@@ -1,66 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📌 Sistem Monitoring Magang Mahasiswa
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-11-red?style=flat&logo=laravel)
+![Vue.js](https://img.shields.io/badge/Vue.js-3-41B883?style=flat&logo=vue.js)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-06B6D4?style=flat&logo=tailwindcss)
+![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=flat&logo=mysql)
+![Docker](https://img.shields.io/badge/Docker-20.10.7-blue?style=flat&logo=docker)
 
-## About Laravel
+Sistem Monitoring Magang Mahasiswa adalah platform berbasis web yang dikembangkan menggunakan **Laravel, Vue.js, dan Tailwind CSS** untuk memantau kegiatan magang mahasiswa secara efisien. Sistem ini memungkinkan mahasiswa, dosen pembimbing, dan pihak perusahaan untuk berinteraksi dan mengelola laporan magang dengan mudah.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Fitur Utama
+✅ **Manajemen Pengguna**: Admin, mahasiswa, dan dosen pembimbing memiliki akses sesuai dengan peran mereka.  
+✅ **Pengelolaan Laporan Magang**: Mahasiswa dapat mengunggah laporan harian, mingguan, dan akhir magang.  
+✅ **Monitoring & Evaluasi**: Dosen pembimbing dapat memberikan feedback dan evaluasi terhadap laporan mahasiswa.  
+✅ **Notifikasi & Dashboard Interaktif**: Informasi terbaru tentang magang dapat diakses dalam satu tampilan dashboard.  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Teknologi yang Digunakan
+- **Backend**: Laravel 11  
+- **Frontend**: Vue.js 3, Tailwind CSS  
+- **Database**: MySQL 8  
+- **Containerization**: Docker & Docker Compose  
+- **Authentication**: Laravel Sanctum  
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🔧 Instalasi & Menjalankan Proyek dengan Docker
+Ikuti langkah-langkah berikut untuk menjalankan proyek menggunakan **Docker**.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### **1. Clone Repository**
+```bash
+git clone https://github.com/riseall/Sistem-Monitoring-Magang.git
+cd Sistem-Monitoring-Magang
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### **2. Konfigurasi File `.env`**
+Salin file `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
+Sesuaikan pengaturan database:
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=airmonitoring
+DB_USERNAME=root
+DB_PASSWORD=root
+```
 
-## Laravel Sponsors
+### **3. Build & Jalankan Docker Containers**
+Jalankan perintah berikut untuk membangun dan menjalankan container:
+```bash
+docker-compose up -d --build
+```
+Perintah ini akan menjalankan beberapa container, termasuk:
+- **Laravel (PHP)**
+- **MySQL Database**
+- **Vue.js Frontend**
+- **Nginx Web Server**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### **4. Install Dependencies**
+Setelah container berjalan, masuk ke container Laravel:
+```bash
+docker exec -it sistem-magang-app bash
+```
+Lalu jalankan:
+```bash
+composer install
+npm install
+npm run build
+```
 
-### Premium Partners
+### **5. Generate Key & Migrasi Database**
+```bash
+php artisan key:generate
+php artisan migrate --seed
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### **6. Akses Aplikasi**
+Aplikasi dapat diakses melalui:
+- **Frontend**: `http://localhost:5173`
+- **Backend API**: `http://localhost:8000`
+- **phpMyAdmin (Opsional)**: `http://localhost:8080` (jika diaktifkan dalam `docker-compose.yml`)
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📸 Tampilan
+🚀 **Tampilan Website**
 
-## Code of Conduct
+![dash log](https://github.com/user-attachments/assets/e103ca64-97c4-42c8-9c70-7cf32500743a)
+![dash adm](https://github.com/user-attachments/assets/dd4761af-eb36-44ca-bac3-7c7c325094bf)
+![dash mgng](https://github.com/user-attachments/assets/e18d62ff-ab08-423e-89ad-2ea3c6bc6e32)
+![dash abs](https://github.com/user-attachments/assets/326b5648-bb61-4ad3-a465-046067669de9)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+🚀 **Tampilan WebAPP**
 
-## Security Vulnerabilities
+![mob log](https://github.com/user-attachments/assets/1b49cfd3-3c55-4401-94b8-852de3b0a1c5)
+![mob reg](https://github.com/user-attachments/assets/2c2d1091-9346-4f5b-abe5-20d935052da4)
+![mob lok](https://github.com/user-attachments/assets/ee828941-1054-4dd2-a7de-893a336cdebd)
+![mob dt mhs2](https://github.com/user-attachments/assets/72266aa2-44d2-47fd-908a-06e8c7fad683)
+![mob dt mhs1](https://github.com/user-attachments/assets/5c926def-0a06-4359-bc39-0b370f1bd58e)
+![mob dsh](https://github.com/user-attachments/assets/6f963ae4-88dc-45cb-a3ca-8963d081d856)
+![mob abs](https://github.com/user-attachments/assets/46a024c2-cff3-48bd-8875-02fffebeec21)
+![mob rwyt](https://github.com/user-attachments/assets/595ac660-49b1-402d-8507-c05efbf67439)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🛠️ Pengelolaan Akun
+| Role | Email | Password |
+|------|--------|---------|
+| Admin | admin@example.com | password |
+| Dosen | dosen@example.com | password |
+| Mahasiswa | mahasiswa@example.com | password |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 📜 Lisensi
+Proyek ini dirilis di bawah lisensi **MIT**. Silakan cek file [LICENSE](LICENSE) untuk informasi lebih lanjut.
+
+---
+
+## 🤝 Kontribusi
+Kontribusi sangat terbuka! Jika ingin berkontribusi:
+1. Fork repo ini
+2. Buat branch baru (`git checkout -b fitur-baru`)
+3. Commit perubahan (`git commit -m "Menambahkan fitur baru"`)
+4. Push ke branch (`git push origin fitur-baru`)
+5. Buat Pull Request 🚀
+
+---
+
+## 📬 Kontak
+📌 **Developer:** [Rizal Nugroho](https://github.com/riseall)  
+📧 **Email:** rizalnug2@gmail.com  
+
+---
+⭐ **Jangan lupa berikan star pada repositori ini jika bermanfaat!** ⭐
